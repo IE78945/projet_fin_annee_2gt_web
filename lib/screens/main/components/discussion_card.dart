@@ -13,11 +13,14 @@ class DiscussionCard extends StatefulWidget {
     this.isActive = true,
     required this.data,
     this.press,
+    required this.updateEmailScreen,
   }) : super(key: key);
 
   final bool isActive;
   final DiscussionModel? data;
   final VoidCallback? press;
+  final Function(String, String, String) updateEmailScreen;
+
 
   @override
   State<DiscussionCard> createState() => _DiscussionCardState();

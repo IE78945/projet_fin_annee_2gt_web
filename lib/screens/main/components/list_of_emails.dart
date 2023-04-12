@@ -6,6 +6,8 @@ import 'package:projet_fin_annee_2gt_web/Repository/chat_repository.dart';
 import 'package:projet_fin_annee_2gt_web/components/side_menu.dart';
 import 'package:projet_fin_annee_2gt_web/models/discussions_model.dart';
 import 'package:projet_fin_annee_2gt_web/responsive.dart';
+import 'package:projet_fin_annee_2gt_web/screens/email/email_screen.dart';
+import 'package:projet_fin_annee_2gt_web/screens/main/main_screen.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../../constants.dart';
@@ -15,9 +17,12 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ListOfEmails extends StatefulWidget {
   // Press "Command + ."
-  const ListOfEmails({
+  ListOfEmails({
     Key? key,
+    void Function(String? id, String phoneNo, String type)? updateEmailScreen,
   }) : super(key: key);
+
+  late Function updateEmailScreen ;
 
   @override
   _ListOfEmailsState createState() => _ListOfEmailsState();
@@ -116,16 +121,16 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                           press: () {
                             print(index);
                             _onCardPressed(index);
-                            /*
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    EmailScreen(email: emails[index]),
-                              ),
+                            //EmailScreen(id: _data![index].id,UserphoneNo :_data![index].phoneNo, ReclamationType : _data![index].type);
+
+                            widget.updateEmailScreen(
+                              _data![index].id, // pass the id
+                              _data![index].phoneNo, // pass the phone number
+                              _data![index].type, // pass the type
                             );
-                             */
+
                           },
+                          updateEmailScreen: widget.updateEmailScreen as dynamic Function(String, String, String) ,
                         ),
                       ) : Text("No data");
                     }

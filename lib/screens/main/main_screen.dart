@@ -10,6 +10,15 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+
+  Widget _emailScreen = Container();
+
+  void updateEmailScreen(String? id, String phoneNo, String type) {
+    setState(() {
+      _emailScreen = EmailScreen(id: id, UserphoneNo: phoneNo, ReclamationType: type);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // It provide us the width and height
@@ -17,16 +26,20 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: Responsive(
         // Let's work on our mobile part
-        mobile: ListOfEmails(),
+        mobile: ListOfEmails(
+          updateEmailScreen: updateEmailScreen,
+        ),
         tablet: Row(
           children: [
             Expanded(
               flex: 6,
-              child: ListOfEmails(),
+              child: ListOfEmails(
+                updateEmailScreen: updateEmailScreen,
+              ),
             ),
             Expanded(
               flex: 9,
-              child: EmailScreen(),
+              child: _emailScreen,
             ),
           ],
         ),
@@ -40,11 +53,13 @@ class _MainScreenState extends State<MainScreen> {
             ),
             Expanded(
               flex: _size.width > 1340 ? 3 : 5,
-              child: ListOfEmails(),
+              child: ListOfEmails(
+                updateEmailScreen: updateEmailScreen,
+              ),
             ),
             Expanded(
               flex: _size.width > 1340 ? 8 : 10,
-              child: EmailScreen(),
+              child: _emailScreen,
             ),
           ],
         ),

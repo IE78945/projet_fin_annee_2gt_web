@@ -1,22 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:projet_fin_annee_2gt_web/Repository/chat_repository.dart';
 import 'package:projet_fin_annee_2gt_web/models/Email.dart';
+import 'package:projet_fin_annee_2gt_web/models/discussions_model.dart';
+import 'package:projet_fin_annee_2gt_web/models/messages_model.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../constants.dart';
 import 'components/header.dart';
+import 'package:intl/intl.dart';
 
 
-class EmailScreen extends StatelessWidget {
-  const EmailScreen({
+
+class EmailScreen extends StatefulWidget {
+
+  EmailScreen({
     Key? key,
     this.email,
+    this.id,
+    this.UserphoneNo,
+    this.ReclamationType,
   }) : super(key: key);
 
   final Email? email;
+  final String? id ;
+  final String? UserphoneNo;
+  final String? ReclamationType;
+
+  @override
+  State<EmailScreen> createState() => _EmailScreenState();
+}
+
+class _EmailScreenState extends State<EmailScreen> {
+  final _chatRepo = Get.put(ChatRepository());
+
+  GetMessage() async {
+    return await _chatRepo.getMessage(widget.id) ;
+  }
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -38,113 +65,89 @@ class EmailScreen extends StatelessWidget {
                       ),
                       SizedBox(width: kDefaultPadding),
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text.rich(
-                                        TextSpan(
-                                          text: emails[1].name,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .button,
-                                          children: [
-                                            TextSpan(
-                                                text:
-                                                    "  <elvia.atkins@gmail.com> to Jerry Torp",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .caption),
-                                          ],
-                                        ),
-                                      ),
-                                      Text(
-                                        "Inspiration for our new home",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline6,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(width: kDefaultPadding / 2),
-                                Text(
-                                  "Today at 15:32",
-                                  style: Theme.of(context).textTheme.caption,
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: kDefaultPadding),
-                            LayoutBuilder(
-                              builder: (context, constraints) => SizedBox(
-                                width: constraints.maxWidth > 850
-                                    ? 800
-                                    : constraints.maxWidth,
-                                child: Column(
+                        child: FutureBuilder(
+                          future: GetMessage(),
+                          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                            if (snapshot.connectionState == ConnectionState.done){
+                              if (snapshot.hasData){
+                                MessageModel message = snapshot.data as MessageModel;
+                                return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      "Hello my love, \n \nSunt architecto voluptatum esse tempora sint nihil minus incidunt nisi. Perspiciatis natus quo unde magnam numquam pariatur amet ut. Perspiciatis ab totam. Ut labore maxime provident. Voluptate ea omnis et ipsum asperiores laborum repellat explicabo fuga. Dolore voluptatem praesentium quis eos laborum dolores cupiditate nemo labore. \n \nLove you, \n\nElvia",
-                                      style: TextStyle(
-                                        height: 1.5,
-                                        color: Color(0xFF4D5875),
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                    ),
-                                    SizedBox(height: kDefaultPadding),
                                     Row(
                                       children: [
-                                        Text(
-                                          "6 attachments",
-                                          style: TextStyle(fontSize: 12),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: widget.UserphoneNo,
+                                                  style: Theme.of(context).textTheme.button,
+                                                ),
+                                              ),
+                                              Text(
+                                                widget.ReclamationType.toString(),
+                                                style: Theme.of(context).textTheme.headline6,)
+                                            ],
+                                          ),
                                         ),
-                                        Spacer(),
+                                        SizedBox(width: kDefaultPadding / 2),
                                         Text(
-                                          "Download All",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .caption,
-                                        ),
-                                        SizedBox(width: kDefaultPadding / 4),
-                                        WebsafeSvg.asset(
-                                          "assets/Icons/Download.svg",
-                                          height: 16,
-                                          colorFilter: ColorFilter.mode(kGrayColor, BlendMode.srcIn) ,
+                                          DateFormat('dd/MM/yyyy hh:mm a').format(message.sentDate),
+                                          style: Theme.of(context).textTheme.caption,
                                         ),
                                       ],
                                     ),
-                                    Divider(thickness: 1),
-                                    SizedBox(height: kDefaultPadding / 2),
-                                    SizedBox(
-                                      height: 200,
-                                      child: StaggeredGrid.count(
-                                        crossAxisCount: 4,
-                                        mainAxisSpacing: kDefaultPadding,
-                                        crossAxisSpacing: kDefaultPadding,
-                                        children: List.generate(
-                                          3,
-                                              (index) => ClipRRect(
-                                            borderRadius: BorderRadius.circular(8),
-                                            child: Image.asset(
-                                              "assets/images/Img_$index.png",
-                                              fit: BoxFit.cover,
+                                    SizedBox(height: kDefaultPadding),
+                                    LayoutBuilder(
+                                      builder: (context, constraints) => SizedBox(
+                                        width: constraints.maxWidth > 850
+                                            ? 800 : constraints.maxWidth,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              message.message,
+                                              style: TextStyle(
+                                                height: 1.5,
+                                                color: Color(0xFF4D5875),
+                                                fontWeight: FontWeight.w300,
+                                              ),
                                             ),
-                                          ),
-                                        ),
+                                            SizedBox(height: kDefaultPadding),
 
+                                            Divider(thickness: 1),
+                                            SizedBox(height: kDefaultPadding / 2),
+                                            SizedBox(
+                                              height: 200,
+                                              child: StaggeredGrid.count(
+                                                crossAxisCount: 4,
+                                                mainAxisSpacing: kDefaultPadding,
+                                                crossAxisSpacing: kDefaultPadding,
+                                                children: List.generate(3, (index) => ClipRRect(
+                                                  borderRadius: BorderRadius.circular(8),
+                                                  child: Image.asset(
+                                                    "assets/images/Img_$index.png",
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
                                         ),
-                                    )
+                                      ),
+                                    ),
                                   ],
-                                ),
-                              ),
-                            ),
-                          ],
+                                );
+                              }
+                              else return Text("no data");
+                            }
+                            else return Text("no data");
+                          },
+
                         ),
                       ),
                     ],

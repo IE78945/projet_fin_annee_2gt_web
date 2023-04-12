@@ -19,7 +19,7 @@ class ChatRepository extends GetxController{
     return b;
   }
 
-  // Fetch All Users discussions in firestore
+  // Fetch All discussions in firestore
   Stream<List<DiscussionModel>> getAllDiscussion() {
     var _ref = _db.collection("Chats");
     return _ref.snapshots().map((querySnapshot) {
@@ -29,5 +29,23 @@ class ChatRepository extends GetxController{
     });
   }
 
+
+  // Fetch all messages based on discussionID
+  Stream<List<MessageModel>> getAllMessages(String? DiscussionId){
+    var _ref =_db.collection("Chats").doc(DiscussionId).collection("Messages");
+    return _ref.snapshots().map((querySnapshot) {
+      return querySnapshot.docs.map((doc) {
+        return MessageModel.fromSnapshot(doc);
+      }).toList();
+    });
+  }
+
+
+  //Fetch message sent by user based on discussion ID
+    Future<MessageModel> getMessage(String? DiscussionId) async{
+      final snapshot = await _db.collection("Chats").doc(DiscussionId).collection("Messages").get();
+      final message = snapshot.docs.map((e) => MessageModel.fromSnapshot(e)).single;
+      return message;
+    }
 
 }
