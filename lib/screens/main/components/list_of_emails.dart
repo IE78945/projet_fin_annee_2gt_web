@@ -4,14 +4,12 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:projet_fin_annee_2gt_web/Repository/authentification_repository.dart';
 import 'package:projet_fin_annee_2gt_web/Repository/chat_repository.dart';
 import 'package:projet_fin_annee_2gt_web/components/side_menu.dart';
-import 'package:projet_fin_annee_2gt_web/models/Email.dart';
 import 'package:projet_fin_annee_2gt_web/models/discussions_model.dart';
 import 'package:projet_fin_annee_2gt_web/responsive.dart';
-import 'package:projet_fin_annee_2gt_web/screens/email/email_screen.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../../constants.dart';
-import 'email_card.dart';
+import 'discussion_card.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -27,12 +25,21 @@ class ListOfEmails extends StatefulWidget {
 
 class _ListOfEmailsState extends State<ListOfEmails> {
 
+  int _activeIndex = 0;
 
   final _authRepo = Get.put(AuthentificationRepository());
   final _chatRepo = Get.put(ChatRepository());
 
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+
+  void _onCardPressed(int index) {
+    setState(() {
+      _activeIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,16 +105,18 @@ class _ListOfEmailsState extends State<ListOfEmails> {
               SizedBox(height: kDefaultPadding),
               Expanded(
                 child: StreamBuilder<List<DiscussionModel>>(
-                    stream: _chatRepo.getUserDiscussion(),
+                    stream: _chatRepo.getAllDiscussion(),
                     builder: (context, snapshot) {
                       var _data = snapshot.data;
                       return snapshot.hasData ? ListView.builder(
                         itemCount: _data?.length,
-                        itemBuilder: (context, index) => EmailCard(
-                          isActive: Responsive.isMobile(context) ? false : index == 0,
-                          data: emails[index],
+                        itemBuilder: (context, index) => DiscussionCard(
+                          isActive: Responsive.isMobile(context) ? false : index == _activeIndex,
+                          data: _data![index],
                           press: () {
                             print(index);
+                            _onCardPressed(index);
+                            /*
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -115,6 +124,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                                     EmailScreen(email: emails[index]),
                               ),
                             );
+                             */
                           },
                         ),
                       ) : Text("No data");

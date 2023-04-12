@@ -14,7 +14,7 @@ class Tags extends StatefulWidget {
 
 class _TagsState extends State<Tags> {
 
-  bool isArrowTagClicked = false;
+  bool isArrowTagClicked = true;
 
   void ShowTags() {
     setState(() {
@@ -59,9 +59,9 @@ class _TagsState extends State<Tags> {
           visible: isArrowTagClicked,
           child: Column(
             children: [
-              buildTag(context, color: Color(0xFF23CF91), title: "GSM"),
-              buildTag(context, color: Color(0xFF3A6FF7), title: "WCDMA"),
-              buildTag(context, color: Color(0xFFF3CF50), title: "LTE"),
+              buildTag(context, color: TagColor2G , title: "GSM"),
+              buildTag(context, color: TagColor3G, title: "WCDMA"),
+              buildTag(context, color: TagColor4G, title: "LTE"),
             ],
           ),
         )

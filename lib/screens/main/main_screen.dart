@@ -4,7 +4,12 @@ import 'package:projet_fin_annee_2gt_web/responsive.dart';
 import 'package:projet_fin_annee_2gt_web/screens/email/email_screen.dart';
 import 'components/list_of_emails.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     // It provide us the width and height

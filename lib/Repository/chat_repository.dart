@@ -20,7 +20,7 @@ class ChatRepository extends GetxController{
   }
 
   // Fetch All Users discussions in firestore
-  Stream<List<DiscussionModel>> getUserDiscussion() {
+  Stream<List<DiscussionModel>> getAllDiscussion() {
     var _ref = _db.collection("Chats");
     return _ref.snapshots().map((querySnapshot) {
       return querySnapshot.docs.map((doc) {

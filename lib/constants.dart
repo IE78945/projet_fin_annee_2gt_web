@@ -11,4 +11,8 @@ const kGrayColor = Color(0xFF8793B2);
 const kTitleTextColor = Color(0xFF30384D);
 const kTextColor = Color(0xFF4D5875);
 
+const TagColor2G = Color(0xFF23CF91);
+const TagColor3G = Color(0xFF3A6FF7);
+const TagColor4G = Color(0xFFF3CF50);
+
 const kDefaultPadding = 20.0;
