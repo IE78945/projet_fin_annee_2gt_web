@@ -3,18 +3,44 @@ import 'package:websafe_svg/websafe_svg.dart';
 
 import '../constants.dart';
 
-class Tags extends StatelessWidget {
+class Tags extends StatefulWidget {
   const Tags({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<Tags> createState() => _TagsState();
+}
+
+class _TagsState extends State<Tags> {
+
+  bool isArrowTagClicked = false;
+
+  void ShowTags() {
+    setState(() {
+      if (!isArrowTagClicked)
+        isArrowTagClicked = true;
+      else
+        isArrowTagClicked = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     return Column(
       children: [
         Row(
           children: [
-            WebsafeSvg.asset("assets/Icons/Angle down.svg", width: 16),
+            MaterialButton(
+              padding: EdgeInsets.all(10),
+              minWidth: 40,
+              onPressed: () {
+                ShowTags();
+              },
+              child: WebsafeSvg.asset("assets/Icons/Angle down.svg", width: 16),
+            ),
+
             SizedBox(width: kDefaultPadding / 4),
             WebsafeSvg.asset("assets/Icons/Markup.svg", width: 20),
             SizedBox(width: kDefaultPadding / 2),
@@ -26,23 +52,23 @@ class Tags extends StatelessWidget {
                   ?.copyWith(color: kGrayColor),
             ),
             Spacer(),
-            MaterialButton(
-              padding: EdgeInsets.all(10),
-              minWidth: 40,
-              onPressed: () {},
-              child: Icon(
-                Icons.add,
-                color: kGrayColor,
-                size: 20,
-              ),
-            )
           ],
         ),
         SizedBox(height: kDefaultPadding / 2),
-        buildTag(context, color: Color(0xFF23CF91), title: "Design"),
-        buildTag(context, color: Color(0xFF3A6FF7), title: "Work"),
-        buildTag(context, color: Color(0xFFF3CF50), title: "Friends"),
-        buildTag(context, color: Color(0xFF8338E1), title: "Family"),
+        Visibility(
+          visible: isArrowTagClicked,
+          child: Column(
+            children: [
+              buildTag(context, color: Color(0xFF23CF91), title: "GSM"),
+              buildTag(context, color: Color(0xFF3A6FF7), title: "WCDMA"),
+              buildTag(context, color: Color(0xFFF3CF50), title: "LTE"),
+            ],
+          ),
+        )
+
+
+
+
       ],
     );
   }
@@ -75,5 +101,4 @@ class Tags extends StatelessWidget {
       ),
     );
   }
-
 }

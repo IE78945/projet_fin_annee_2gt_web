@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:projet_fin_annee_2gt_web/Repository/authentification_repository.dart';
+import 'package:projet_fin_annee_2gt_web/Repository/chat_repository.dart';
 import 'package:projet_fin_annee_2gt_web/components/side_menu.dart';
 import 'package:projet_fin_annee_2gt_web/models/Email.dart';
+import 'package:projet_fin_annee_2gt_web/models/discussions_model.dart';
 import 'package:projet_fin_annee_2gt_web/responsive.dart';
 import 'package:projet_fin_annee_2gt_web/screens/email/email_screen.dart';
 import 'package:websafe_svg/websafe_svg.dart';
@@ -21,6 +26,12 @@ class ListOfEmails extends StatefulWidget {
 }
 
 class _ListOfEmailsState extends State<ListOfEmails> {
+
+
+  final _authRepo = Get.put(AuthentificationRepository());
+  final _chatRepo = Get.put(ChatRepository());
+
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -53,28 +64,6 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                         },
                       ),
                     if (!Responsive.isDesktop(context)) SizedBox(width: 5),
-                    Expanded(
-                      child: TextField(
-                        onChanged: (value) {},
-                        decoration: InputDecoration(
-                          hintText: "Search",
-                          fillColor: kBgLightColor,
-                          filled: true,
-                          suffixIcon: Padding(
-                            padding: const EdgeInsets.all(
-                                kDefaultPadding * 0.75), //15
-                            child: WebsafeSvg.asset(
-                              "assets/Icons/Search.svg",
-                              width: 24,
-                            ),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -108,23 +97,28 @@ class _ListOfEmailsState extends State<ListOfEmails> {
               ),
               SizedBox(height: kDefaultPadding),
               Expanded(
-                child: ListView.builder(
-                  itemCount: emails.length,
-                  // On mobile this active dosen't mean anything
-                  itemBuilder: (context, index) => EmailCard(
-                    isActive: Responsive.isMobile(context) ? false : index == 0,
-                    email: emails[index],
-                    press: () {
-                      print(index);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              EmailScreen(email: emails[index]),
+                child: StreamBuilder<List<DiscussionModel>>(
+                    stream: _chatRepo.getUserDiscussion(),
+                    builder: (context, snapshot) {
+                      var _data = snapshot.data;
+                      return snapshot.hasData ? ListView.builder(
+                        itemCount: _data?.length,
+                        itemBuilder: (context, index) => EmailCard(
+                          isActive: Responsive.isMobile(context) ? false : index == 0,
+                          data: emails[index],
+                          press: () {
+                            print(index);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    EmailScreen(email: emails[index]),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
+                      ) : Text("No data");
+                    }
                 ),
               ),
             ],
@@ -132,5 +126,6 @@ class _ListOfEmailsState extends State<ListOfEmails> {
         ),
       ),
     );
+
   }
 }

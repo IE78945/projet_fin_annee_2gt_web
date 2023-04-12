@@ -36,51 +36,6 @@ class SideMenu extends StatelessWidget {
                   if (!Responsive.isDesktop(context)) CloseButton(),
                 ],
               ),
-              SizedBox(height: kDefaultPadding),
-              TextButton.icon(
-                onPressed: () {},
-                icon: WebsafeSvg.asset("assets/Icons/Edit.svg", width: 16),
-                label: Text(
-                  "New message",
-                  style: TextStyle(color: Colors.white),
-                ),
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  backgroundColor: MaterialStateProperty.all<Color>(kPrimaryColor),
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    EdgeInsets.symmetric(vertical: kDefaultPadding),
-                  ),
-                ),
-              ).addNeumorphism(
-                topShadowColor: Colors.white,
-                bottomShadowColor: Color(0xFF234395).withOpacity(0.2),
-              ),
-
-              SizedBox(height: kDefaultPadding),
-              TextButton.icon(
-                onPressed: () {},
-                icon: WebsafeSvg.asset("assets/Icons/Download.svg", width: 16),
-                label: Text(
-                  "Get messages",
-                  style: TextStyle(color: kTextColor),
-                ),
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  backgroundColor: MaterialStateProperty.all<Color>(kBgDarkColor),
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    EdgeInsets.symmetric(vertical: kDefaultPadding),
-                  ),
-                ),
-              ).addNeumorphism(),
-
               SizedBox(height: kDefaultPadding * 2),
               // Menu Items
               SideMenuItem(
@@ -99,13 +54,13 @@ class SideMenu extends StatelessWidget {
               ),
               SideMenuItem(
                 press: () {},
-                title: "Drafts",
+                title: "Technical",
                 iconSrc: "assets/Icons/File.svg",
                 isActive: false,
               ),
               SideMenuItem(
                 press: () {},
-                title: "Deleted",
+                title: "Commercial",
                 iconSrc: "assets/Icons/Trash.svg",
                 isActive: false,
                 showBorder: false,
