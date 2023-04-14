@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:projet_fin_annee_2gt_web/Repository/chat_repository.dart';
 import 'package:projet_fin_annee_2gt_web/responsive.dart';
 
 import '../constants.dart';
@@ -7,10 +10,18 @@ import 'tags.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-class SideMenu extends StatelessWidget {
+class SideMenu extends StatefulWidget {
   const SideMenu({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<SideMenu> createState() => _SideMenuState();
+}
+
+class _SideMenuState extends State<SideMenu> {
+
+  final _chatRepo = Get.put(ChatRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +47,34 @@ class SideMenu extends StatelessWidget {
               ),
               SizedBox(height: kDefaultPadding * 2),
               // Menu Items
-              SideMenuItem(
-                press: () {},
-                title: "Inbox",
-                iconSrc: "assets/Icons/Inbox.svg",
-                isActive: true,
-                itemCount: 3,
+              FutureBuilder(
+                future: _chatRepo.getUnreadMessagesNumber(),
+                builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done){
+                    if (snapshot.hasData){
+                      return SideMenuItem(
+                        press: () {},
+                        title: "Inbox",
+                        iconSrc: "assets/Icons/Inbox.svg",
+                        isActive: true,
+                        itemCount: snapshot.data,
+                      );
+                    }
+                    else return SideMenuItem(
+                      press: () {},
+                      title: "Inbox",
+                      iconSrc: "assets/Icons/Inbox.svg",
+                      isActive: true,
+                    );
+                  }
+                  else return SideMenuItem(
+                    press: () {},
+                    title: "Inbox",
+                    iconSrc: "assets/Icons/Inbox.svg",
+                    isActive: true,
+                  );
+                },
+
               ),
               SideMenuItem(
                 press: () {},

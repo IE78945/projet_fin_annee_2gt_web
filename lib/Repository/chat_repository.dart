@@ -48,4 +48,15 @@ class ChatRepository extends GetxController{
       return message;
     }
 
+
+  // Count unread messages by admin
+  Future<int> getUnreadMessagesNumber() async{
+    print("hi");
+    AggregateQuerySnapshot num = await _db.collection("Chats").where("LastMessageStatusAdmin",isEqualTo: false).count().get();
+    print(num.count);
+    return num.count;
+  }
+
+
+
 }
