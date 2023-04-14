@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MessageModel {
   final String? id ;
   final String message;
-  final DateTime sentDate;
+  final Timestamp sentDate;
   final String senderId;
   final String status;
   final Map? phoneData;
@@ -43,5 +43,5 @@ class MessageModel {
       location: data["Location"],
     );
   }
-
+  DateTime get sentDateTime => sentDate.toDate();
 }

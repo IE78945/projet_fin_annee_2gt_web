@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:projet_fin_annee_2gt_web/models/Email.dart';
 import 'package:projet_fin_annee_2gt_web/models/discussions_model.dart';
+import 'package:projet_fin_annee_2gt_web/screens/email/email_screen.dart';
+import 'package:projet_fin_annee_2gt_web/screens/main/main_screen.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 import 'package:intl/intl.dart';
 
@@ -11,15 +13,13 @@ class DiscussionCard extends StatefulWidget {
   const DiscussionCard({
     Key? key,
     this.isActive = true,
-    required this.data,
+    this.data,
     this.press,
-    required this.updateEmailScreen,
   }) : super(key: key);
 
   final bool isActive;
   final DiscussionModel? data;
   final VoidCallback? press;
-  final Function(String, String, String) updateEmailScreen;
 
 
   @override
@@ -46,12 +46,13 @@ class _DiscussionCardState extends State<DiscussionCard> {
     setState(() {
       isSelected = true;
     });
-    widget.press?.call();
+      widget.press?.call();
   }
 
   @override
   Widget build(BuildContext context) {
     //  Here the shadow is not showing properly
+
 
     Color c =GetColor();
     return Padding(

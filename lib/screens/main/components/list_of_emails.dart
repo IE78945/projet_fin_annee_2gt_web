@@ -19,10 +19,8 @@ class ListOfEmails extends StatefulWidget {
   // Press "Command + ."
   ListOfEmails({
     Key? key,
-    void Function(String? id, String phoneNo, String type)? updateEmailScreen,
   }) : super(key: key);
 
-  late Function updateEmailScreen ;
 
   @override
   _ListOfEmailsState createState() => _ListOfEmailsState();
@@ -121,16 +119,18 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                           press: () {
                             print(index);
                             _onCardPressed(index);
-                            //EmailScreen(id: _data![index].id,UserphoneNo :_data![index].phoneNo, ReclamationType : _data![index].type);
 
-                            widget.updateEmailScreen(
-                              _data![index].id, // pass the id
-                              _data![index].phoneNo, // pass the phone number
-                              _data![index].type, // pass the type
-                            );
+                            setState(() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      MainScreen(updatedEmailData: _data![index]),
+                                ),
+                              );
+                            });
 
                           },
-                          updateEmailScreen: widget.updateEmailScreen as dynamic Function(String, String, String) ,
                         ),
                       ) : Text("No data");
                     }

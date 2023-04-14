@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -6,6 +8,7 @@ import 'package:projet_fin_annee_2gt_web/Repository/chat_repository.dart';
 import 'package:projet_fin_annee_2gt_web/models/Email.dart';
 import 'package:projet_fin_annee_2gt_web/models/discussions_model.dart';
 import 'package:projet_fin_annee_2gt_web/models/messages_model.dart';
+import 'package:projet_fin_annee_2gt_web/screens/main/main_screen.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../constants.dart';
@@ -36,13 +39,14 @@ class EmailScreen extends StatefulWidget {
 class _EmailScreenState extends State<EmailScreen> {
   final _chatRepo = Get.put(ChatRepository());
 
+
+
   GetMessage() async {
     return await _chatRepo.getMessage(widget.id) ;
   }
 
   @override
   Widget build(BuildContext context) {
-
 
     return Scaffold(
       body: Container(
@@ -95,7 +99,7 @@ class _EmailScreenState extends State<EmailScreen> {
                                         ),
                                         SizedBox(width: kDefaultPadding / 2),
                                         Text(
-                                          DateFormat('dd/MM/yyyy hh:mm a').format(message.sentDate),
+                                          DateFormat('dd/MM/yyyy hh:mm a').format(message.sentDate.toDate()),
                                           style: Theme.of(context).textTheme.caption,
                                         ),
                                       ],
