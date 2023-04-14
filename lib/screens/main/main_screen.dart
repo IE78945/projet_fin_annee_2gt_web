@@ -11,13 +11,15 @@ class MainScreen extends StatefulWidget {
 
 
   MainScreen({
-    this.updatedEmailData, this.clickedDiscussionIndex
+    this.updatedEmailData,
+    this.clickedDiscussionIndex,
+    this.DiscussionSortedBy,
 
   });
 
   final DiscussionModel? updatedEmailData;
   final int? clickedDiscussionIndex;
-
+  final String? DiscussionSortedBy;
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -32,12 +34,12 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: Responsive(
         // Let's work on our mobile part
-        mobile: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex),
+        mobile: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex, sortBy: widget.DiscussionSortedBy),
         tablet: Row(
           children: [
             Expanded(
               flex: 6,
-              child: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex),
+              child: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex, sortBy: widget.DiscussionSortedBy),
             ),
             Expanded(
               flex: 9,
@@ -57,7 +59,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             Expanded(
               flex: _size.width > 1340 ? 3 : 5,
-              child: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex),
+              child: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex, sortBy: widget.DiscussionSortedBy),
             ),
             Expanded(
               flex: _size.width > 1340 ? 8 : 10,

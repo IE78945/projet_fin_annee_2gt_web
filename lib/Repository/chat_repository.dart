@@ -29,6 +29,26 @@ class ChatRepository extends GetxController{
     });
   }
 
+  // Fetch discussions in firestore based on type
+  Stream<List<DiscussionModel>> getSortedDiscussionBasedOnType(String? type) {
+    var _ref = _db.collection("Chats").where("Type" , isEqualTo: type);
+    return _ref.snapshots().map((querySnapshot) {
+      return querySnapshot.docs.map((doc) {
+        return DiscussionModel.fromSnapshot(doc);
+      }).toList();
+    });
+  }
+
+  // Fetch discussions in firestore based on generation
+  Stream<List<DiscussionModel>> getSortedDiscussionBasedOnGenaration(String? generation) {
+    var _ref = _db.collection("Chats").where("Generation" , isEqualTo: generation);
+    return _ref.snapshots().map((querySnapshot) {
+      return querySnapshot.docs.map((doc) {
+        print(doc);
+        return DiscussionModel.fromSnapshot(doc);
+      }).toList();
+    });
+  }
 
   // Fetch all messages based on discussionID
   Stream<List<MessageModel>> getAllMessages(String? DiscussionId){
@@ -51,9 +71,7 @@ class ChatRepository extends GetxController{
 
   // Count unread messages by admin
   Future<int> getUnreadMessagesNumber() async{
-    print("hi");
     AggregateQuerySnapshot num = await _db.collection("Chats").where("LastMessageStatusAdmin",isEqualTo: false).count().get();
-    print(num.count);
     return num.count;
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projet_fin_annee_2gt_web/screens/main/main_screen.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../constants.dart';
@@ -67,8 +68,6 @@ class _TagsState extends State<Tags> {
         )
 
 
-
-
       ],
     );
   }
@@ -76,7 +75,43 @@ class _TagsState extends State<Tags> {
   InkWell buildTag(BuildContext context,
       {required Color color, required String title}) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        switch(title) {
+          case "GSM": {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    MainScreen(DiscussionSortedBy: "2G (GSM)",),
+              ),
+            );
+          }
+          break;
+
+          case "WCDMA": {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    MainScreen(DiscussionSortedBy: "3G (CDMA)",),
+              ),
+            );
+          }
+          break;
+
+          case "LTE": {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    MainScreen(DiscussionSortedBy: "4G (LTE)",),
+              ),
+            );
+          }
+          break;
+
+        }
+      },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(kDefaultPadding * 1.5, 10, 0, 10),
         child: Row(

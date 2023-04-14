@@ -18,10 +18,13 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 class ListOfEmails extends StatefulWidget {
   // Press "Command + ."
   ListOfEmails({
-    Key? key, this.clickedDiscussionIndex,
+    Key? key,
+    this.clickedDiscussionIndex,
+    this.sortBy,
   }) : super(key: key);
 
   int? clickedDiscussionIndex;
+  String? sortBy;
 
   @override
   _ListOfEmailsState createState() => _ListOfEmailsState();
@@ -120,7 +123,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
               SizedBox(height: kDefaultPadding),
               Expanded(
                 child: StreamBuilder<List<DiscussionModel>>(
-                    stream: _chatRepo.getAllDiscussion(),
+                    stream: GetDiscussionSortedBy(),
                     builder: (context, snapshot) {
                       var _data = snapshot.data;
                       return snapshot.hasData ? ListView.builder(
@@ -152,6 +155,16 @@ class _ListOfEmailsState extends State<ListOfEmails> {
         ),
       ),
     );
+
+  }
+
+  GetDiscussionSortedBy() {
+    if (widget.sortBy == "2G (GSM)" || widget.sortBy == "3G (CDMA)" || widget.sortBy == "4G (LTE)" )
+      return _chatRepo.getSortedDiscussionBasedOnGenaration(widget.sortBy);
+
+    else return _chatRepo.getAllDiscussion();
+
+
 
   }
 }
