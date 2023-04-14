@@ -18,9 +18,10 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 class ListOfEmails extends StatefulWidget {
   // Press "Command + ."
   ListOfEmails({
-    Key? key,
+    Key? key, this.clickedDiscussionIndex,
   }) : super(key: key);
 
+  int? clickedDiscussionIndex;
 
   @override
   _ListOfEmailsState createState() => _ListOfEmailsState();
@@ -28,7 +29,7 @@ class ListOfEmails extends StatefulWidget {
 
 class _ListOfEmailsState extends State<ListOfEmails> {
 
-  int _activeIndex = 0;
+  late int _activeIndex ;
 
   final _authRepo = Get.put(AuthentificationRepository());
   final _chatRepo = Get.put(ChatRepository());
@@ -41,6 +42,17 @@ class _ListOfEmailsState extends State<ListOfEmails> {
     setState(() {
       _activeIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    if (widget.clickedDiscussionIndex == null) {
+      _activeIndex = -1;
+    }
+    else {
+      _activeIndex = widget.clickedDiscussionIndex!;
+    }
+    super.initState();
   }
 
   @override
@@ -119,13 +131,12 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                           press: () {
                             print(index);
                             _onCardPressed(index);
-
                             setState(() {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      MainScreen(updatedEmailData: _data![index]),
+                                      MainScreen(updatedEmailData: _data![index] , clickedDiscussionIndex : index!),
                                 ),
                               );
                             });

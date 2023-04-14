@@ -11,11 +11,12 @@ class MainScreen extends StatefulWidget {
 
 
   MainScreen({
-    this.updatedEmailData
+    this.updatedEmailData, this.clickedDiscussionIndex
 
   });
 
   final DiscussionModel? updatedEmailData;
+  final int? clickedDiscussionIndex;
 
 
   @override
@@ -31,18 +32,18 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: Responsive(
         // Let's work on our mobile part
-        mobile: ListOfEmails(),
+        mobile: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex),
         tablet: Row(
           children: [
             Expanded(
               flex: 6,
-              child: ListOfEmails(),
+              child: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex),
             ),
             Expanded(
               flex: 9,
               child: widget.updatedEmailData != null
                   ? EmailScreen(id: widget.updatedEmailData!.id,UserphoneNo :widget.updatedEmailData!.phoneNo, ReclamationType : widget.updatedEmailData!.type)
-                  : EmailScreen(),
+                  : Container(),
             ),
           ],
         ),
@@ -56,13 +57,13 @@ class _MainScreenState extends State<MainScreen> {
             ),
             Expanded(
               flex: _size.width > 1340 ? 3 : 5,
-              child: ListOfEmails(),
+              child: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex),
             ),
             Expanded(
               flex: _size.width > 1340 ? 8 : 10,
               child:  widget.updatedEmailData != null
                   ? EmailScreen(id: widget.updatedEmailData!.id,UserphoneNo :widget.updatedEmailData!.phoneNo, ReclamationType : widget.updatedEmailData!.type)
-                  : EmailScreen(),
+                  : Container(),
             ),
           ],
         ),
