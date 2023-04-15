@@ -23,7 +23,6 @@ class ListOfEmails extends StatefulWidget {
     this.sortBy,
     required this.updateEmailScreen,
 
-
   }) : super(key: key);
 
   int? clickedDiscussionIndex;

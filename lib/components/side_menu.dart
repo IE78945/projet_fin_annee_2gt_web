@@ -11,9 +11,12 @@ import 'tags.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class SideMenu extends StatefulWidget {
-  const SideMenu({
+  SideMenu({
+    this.clickedMenuItemIndex,
     Key? key,
   }) : super(key: key);
+
+  int? clickedMenuItemIndex;
 
   @override
   State<SideMenu> createState() => _SideMenuState();
@@ -21,7 +24,30 @@ class SideMenu extends StatefulWidget {
 
 class _SideMenuState extends State<SideMenu> {
 
+  late int _activeIndex ;
   final _chatRepo = Get.put(ChatRepository());
+
+  void _onMenuItemPress(int index) {
+    setState(() {
+      _activeIndex = index;
+    });
+  }
+
+  bool isItemSelected(int index){
+    if (_activeIndex == index) return true;
+    else return false;
+  }
+
+  @override
+  void initState() {
+    if (widget.clickedMenuItemIndex == null) {
+      _activeIndex = 0;
+    }
+    else {
+      _activeIndex = widget.clickedMenuItemIndex!;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,57 +80,71 @@ class _SideMenuState extends State<SideMenu> {
                     if (snapshot.hasData){
                       if(snapshot.data == 0 ) {
                         return SideMenuItem(
-                          press: () {},
+                          press: () {
+                            _onMenuItemPress(0);
+                          },
                           title: "Inbox",
                           iconSrc: "assets/Icons/Inbox.svg",
-                          isActive: true,
+                          isActive: isItemSelected(0),
                         );
                       }
                       else {
                         return SideMenuItem(
-                          press: () {},
+                          press: () {
+                            _onMenuItemPress(0);
+                          },
                           title: "Inbox",
                           iconSrc: "assets/Icons/Inbox.svg",
-                          isActive: true,
+                          isActive: isItemSelected(0),
                           itemCount: snapshot.data,
                         );
                       }
 
                     }
                     else return SideMenuItem(
-                      press: () {},
+                      press: () {
+                        _onMenuItemPress(0);
+                      },
                       title: "Inbox",
                       iconSrc: "assets/Icons/Inbox.svg",
-                      isActive: true,
+                      isActive: isItemSelected(0),
                     );
                   }
                   else return SideMenuItem(
-                    press: () {},
+                    press: () {
+                      _onMenuItemPress(0);
+                    },
                     title: "Inbox",
                     iconSrc: "assets/Icons/Inbox.svg",
-                    isActive: true,
+                    isActive: isItemSelected(0),
                   );
                 },
 
               ),
               SideMenuItem(
-                press: () {},
+                press: () {
+                  _onMenuItemPress(1);
+                },
                 title: "Sent",
                 iconSrc: "assets/Icons/Send.svg",
-                isActive: false,
+                isActive: isItemSelected(1),
 
               ),
               SideMenuItem(
-                press: () {},
+                press: () {
+                  _onMenuItemPress(2);
+                },
                 title: "Technical",
                 iconSrc: "assets/Icons/File.svg",
-                isActive: false,
+                isActive: isItemSelected(2),
               ),
               SideMenuItem(
-                press: () {},
+                press: () {
+                  _onMenuItemPress(3);
+                },
                 title: "Commercial",
                 iconSrc: "assets/Icons/Trash.svg",
-                isActive: false,
+                isActive: isItemSelected(3),
                 showBorder: false,
               ),
 

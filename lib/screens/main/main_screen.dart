@@ -11,12 +11,12 @@ class MainScreen extends StatefulWidget {
     this.updatedEmailData,
     this.clickedDiscussionIndex,
     this.DiscussionSortedBy,
-
   });
 
   final DiscussionModel? updatedEmailData;
   final int? clickedDiscussionIndex;
   final String? DiscussionSortedBy;
+
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -25,6 +25,8 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
 
   Widget emailScreen = EmailScreen(id: "", UserphoneNo: "", ReclamationType: "");
+
+
 
   void updateEmailScreen(String? id, String userPhoneNo, String reclamationType) {
     setState(() {
@@ -44,7 +46,11 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: Responsive(
         // Let's work on our mobile part
-        mobile: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex, sortBy: widget.DiscussionSortedBy,updateEmailScreen: updateEmailScreen,),
+        mobile: ListOfEmails(
+          clickedDiscussionIndex : widget.clickedDiscussionIndex,
+          sortBy: widget.DiscussionSortedBy,
+          updateEmailScreen: updateEmailScreen,
+        ),
         tablet: Row(
           children: [
             Expanded(
