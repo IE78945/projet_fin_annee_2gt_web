@@ -1,5 +1,6 @@
 import 'dart:js';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,8 @@ import 'package:projet_fin_annee_2gt_web/models/Email.dart';
 import 'package:projet_fin_annee_2gt_web/models/discussions_model.dart';
 import 'package:projet_fin_annee_2gt_web/models/messages_model.dart';
 import 'package:projet_fin_annee_2gt_web/screens/main/main_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../constants.dart';
@@ -39,7 +42,15 @@ class EmailScreen extends StatefulWidget {
 class _EmailScreenState extends State<EmailScreen> {
   final _chatRepo = Get.put(ChatRepository());
 
+  void launchGoogleMaps(GeoPoint geoPoint) async {
+    String url = "https://www.google.com/maps/search/?api=1&query=${geoPoint.latitude},${geoPoint.longitude}";
 
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   GetMessage() async {
     //update  LastMessageStatusAdmin to true in firestore
@@ -132,10 +143,35 @@ class _EmailScreenState extends State<EmailScreen> {
                                               SizedBox(height: kDefaultPadding),
                                               SizedBox(height: kDefaultPadding / 2),
                                               //Location
+                                              //Text("Longitude : "+message.location!.longitude.toString()):Text(""),
                                               isTechnicalRequest?
-                                              Text("Longitude : "+message.location!.longitude.toString()):Text(""),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  launchGoogleMaps(message.location!);
+                                                },
+                                                child: Text(
+                                                  '${message.location!.latitude}, ${message.location!.longitude}',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ):Text(""),
+
+                                              SizedBox(height: kDefaultPadding),
+
                                               isTechnicalRequest?
-                                              Text("Latitude : "+message.location!.latitude.toString()):Text(""),
+                                              //Text("Latitude : "+message.location!.latitude.toString()):Text(""),
+                                              ElevatedButton(
+                                                onPressed: () {launchGoogleMaps(message.location!);},
+                                                child: Text(
+                                                  'View location on Google Maps',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ):Text(""),
 
                                               SizedBox(height: kDefaultPadding),
                                               //tableau
