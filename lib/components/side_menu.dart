@@ -52,13 +52,24 @@ class _SideMenuState extends State<SideMenu> {
                 builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   if (snapshot.connectionState == ConnectionState.done){
                     if (snapshot.hasData){
-                      return SideMenuItem(
-                        press: () {},
-                        title: "Inbox",
-                        iconSrc: "assets/Icons/Inbox.svg",
-                        isActive: true,
-                        itemCount: snapshot.data,
-                      );
+                      if(snapshot.data == 0 ) {
+                        return SideMenuItem(
+                          press: () {},
+                          title: "Inbox",
+                          iconSrc: "assets/Icons/Inbox.svg",
+                          isActive: true,
+                        );
+                      }
+                      else {
+                        return SideMenuItem(
+                          press: () {},
+                          title: "Inbox",
+                          iconSrc: "assets/Icons/Inbox.svg",
+                          isActive: true,
+                          itemCount: snapshot.data,
+                        );
+                      }
+
                     }
                     else return SideMenuItem(
                       press: () {},

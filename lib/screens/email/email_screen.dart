@@ -42,11 +42,20 @@ class _EmailScreenState extends State<EmailScreen> {
 
 
   GetMessage() async {
+    //update  LastMessageStatusAdmin to true in firestore
+    await _chatRepo.MessageSeenByAdmin(widget.id);
+    //return message
     return await _chatRepo.getMessage(widget.id) ;
   }
 
   @override
   Widget build(BuildContext context) {
+    late bool isTechnicalRequest;
+    if (widget.ReclamationType == "Technical Request")
+      isTechnicalRequest = true;
+    else
+      isTechnicalRequest = false;
+
 
     return Scaffold(
       body: Container(
@@ -122,8 +131,15 @@ class _EmailScreenState extends State<EmailScreen> {
                                               ),
                                               SizedBox(height: kDefaultPadding),
                                               SizedBox(height: kDefaultPadding / 2),
+                                              //Location
+                                              isTechnicalRequest?
+                                              Text("Longitude : "+message.location!.longitude.toString()):Text(""),
+                                              isTechnicalRequest?
+                                              Text("Latitude : "+message.location!.latitude.toString()):Text(""),
+
+                                              SizedBox(height: kDefaultPadding),
+                                              //tableau
                                               SizedBox(
-                                                height: 200,
                                                 child: (widget.ReclamationType == "Technical Request")
                                                     ? Table(
                                                   border: TableBorder.all(color: Colors.black54),
@@ -150,6 +166,8 @@ class _EmailScreenState extends State<EmailScreen> {
                                                 )
                                                     : Text(""),
                                               ),
+                                              //
+                                              SizedBox(height: kDefaultPadding),
 
                                             ],
                                           ),

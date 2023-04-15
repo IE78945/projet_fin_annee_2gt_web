@@ -76,5 +76,10 @@ class ChatRepository extends GetxController{
   }
 
 
+  // Update LastMessageStatusAdmin to true
+  MessageSeenByAdmin(String? DiscussionId) async {
+    await _db.collection("Chats").doc(DiscussionId).update({'LastMessageStatusAdmin': true});
+  }
+
 
 }

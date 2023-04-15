@@ -42,17 +42,9 @@ class _DiscussionCardState extends State<DiscussionCard> {
     super.initState();
   }
 
-  void _handleTap() {
-    setState(() {
-      isSelected = true;
-    });
-      widget.press?.call();
-  }
-
   @override
   Widget build(BuildContext context) {
     //  Here the shadow is not showing properly
-
     Color c =GetColor();
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -152,11 +144,7 @@ class _DiscussionCardState extends State<DiscussionCard> {
                 child: WebsafeSvg.asset(
                   "assets/Icons/Markup filled.svg",
                   height: 18,
-
-
-                  colorFilter: ColorFilter.mode(c, BlendMode.modulate)
-
-
+                  colorFilter: ColorFilter.mode(c, BlendMode.srcIn)
                 ),
               )
           ],

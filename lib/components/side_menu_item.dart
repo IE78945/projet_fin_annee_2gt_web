@@ -13,7 +13,7 @@ import 'counter_badge.dart';
 class SideMenuItem extends StatelessWidget {
   const SideMenuItem({
     Key? key,
-    this.isActive,
+    this.isActive = false,
     this.isHover = false,
     this.itemCount,
     this.showBorder = true,
