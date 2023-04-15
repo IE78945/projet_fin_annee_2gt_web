@@ -24,8 +24,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
 
-
-  /*----------------------Just added ---------------------------*/
   Widget emailScreen = EmailScreen(id: "", UserphoneNo: "", ReclamationType: "");
 
   void updateEmailScreen(String? id, String userPhoneNo, String reclamationType) {
@@ -38,7 +36,6 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  /*------------------------------------------------------------*/
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +53,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             Expanded(
               flex: 9,
-              child: widget.updatedEmailData != null
-                  ? emailScreen
-                  : Container(),
+              child: emailScreen,
             ),
           ],
         ),

@@ -54,19 +54,12 @@ class _EmailScreenState extends State<EmailScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              Header(),
-              Divider(thickness: 1),
               Expanded(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.all(kDefaultPadding),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CircleAvatar(
-                        maxRadius: 24,
-                        backgroundColor: Colors.transparent,
-                        backgroundImage: AssetImage(emails[1].image),
-                      ),
                       SizedBox(width: kDefaultPadding),
                       Expanded(
                         child: FutureBuilder(
@@ -75,6 +68,11 @@ class _EmailScreenState extends State<EmailScreen> {
                             if (snapshot.connectionState == ConnectionState.done){
                               if (snapshot.hasData){
                                 MessageModel message = snapshot.data as MessageModel;
+                                // Convert the map into a list of key-value pairs
+                                List<MapEntry<dynamic, dynamic>> items =[];
+                                if (widget.ReclamationType == "Technical Request")
+                                  items = message.phoneData!.entries.toList();
+
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -85,15 +83,15 @@ class _EmailScreenState extends State<EmailScreen> {
                                             crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                             children: [
+                                              Text(
+                                                widget.ReclamationType.toString(),
+                                                style: Theme.of(context).textTheme.headline6,),
                                               Text.rich(
                                                 TextSpan(
                                                   text: widget.UserphoneNo,
                                                   style: Theme.of(context).textTheme.button,
                                                 ),
                                               ),
-                                              Text(
-                                                widget.ReclamationType.toString(),
-                                                style: Theme.of(context).textTheme.headline6,)
                                             ],
                                           ),
                                         ),
@@ -105,49 +103,63 @@ class _EmailScreenState extends State<EmailScreen> {
                                       ],
                                     ),
                                     SizedBox(height: kDefaultPadding),
+                                    Divider(thickness: 1),
                                     LayoutBuilder(
                                       builder: (context, constraints) => SizedBox(
                                         width: constraints.maxWidth > 850
                                             ? 800 : constraints.maxWidth,
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              message.message,
-                                              style: TextStyle(
-                                                height: 1.5,
-                                                color: Color(0xFF4D5875),
-                                                fontWeight: FontWeight.w300,
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                message.message,
+                                                style: TextStyle(
+                                                  height: 1.5,
+                                                  color: Color(0xFF4D5875),
+                                                  fontWeight: FontWeight.w300,
+                                                ),
                                               ),
-                                            ),
-                                            SizedBox(height: kDefaultPadding),
+                                              SizedBox(height: kDefaultPadding),
+                                              SizedBox(height: kDefaultPadding / 2),
+                                              SizedBox(
+                                                height: 200,
+                                                child: (widget.ReclamationType == "Technical Request")
+                                                    ? Table(
+                                                  border: TableBorder.all(color: Colors.black54),
+                                                  // Create a table with one row per entry in the map
+                                                  children: items.map((entry) {
+                                                    return TableRow(
+                                                      // Each row has two cells: one for the key, one for the value
+                                                      children: [
+                                                        TableCell(
+                                                          child: Padding(
+                                                            padding: EdgeInsets.all(8.0),
+                                                            child: Text('${entry.key}'),
+                                                          ),
+                                                        ),
+                                                        TableCell(
+                                                          child: Padding(
+                                                            padding: EdgeInsets.all(8.0),
+                                                            child: Text('${entry.value}'),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }).toList(),
+                                                )
+                                                    : Text(""),
+                                              ),
 
-                                            Divider(thickness: 1),
-                                            SizedBox(height: kDefaultPadding / 2),
-                                            SizedBox(
-                                              height: 200,
-                                              child: StaggeredGrid.count(
-                                                crossAxisCount: 4,
-                                                mainAxisSpacing: kDefaultPadding,
-                                                crossAxisSpacing: kDefaultPadding,
-                                                children: List.generate(3, (index) => ClipRRect(
-                                                  borderRadius: BorderRadius.circular(8),
-                                                  child: Image.asset(
-                                                    "assets/images/Img_$index.png",
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                                ),
-                                              ),
-                                            )
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ],
                                 );
                               }
-                              else return Text("no data");
+                              else return Container();
                             }
                             else return Text("no data");
                           },
