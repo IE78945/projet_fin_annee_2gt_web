@@ -7,9 +7,6 @@ import 'components/list_of_emails.dart';
 
 class MainScreen extends StatefulWidget {
 
-
-
-
   MainScreen({
     this.updatedEmailData,
     this.clickedDiscussionIndex,
@@ -27,6 +24,22 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
 
+
+  /*----------------------Just added ---------------------------*/
+  Widget emailScreen = EmailScreen(id: "", UserphoneNo: "", ReclamationType: "");
+
+  void updateEmailScreen(String? id, String userPhoneNo, String reclamationType) {
+    setState(() {
+      emailScreen = EmailScreen(
+        id: id,
+        UserphoneNo: userPhoneNo,
+        ReclamationType: reclamationType,
+      );
+    });
+  }
+
+  /*------------------------------------------------------------*/
+
   @override
   Widget build(BuildContext context) {
     // It provide us the width and height
@@ -34,17 +47,17 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: Responsive(
         // Let's work on our mobile part
-        mobile: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex, sortBy: widget.DiscussionSortedBy),
+        mobile: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex, sortBy: widget.DiscussionSortedBy,updateEmailScreen: updateEmailScreen,),
         tablet: Row(
           children: [
             Expanded(
               flex: 6,
-              child: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex, sortBy: widget.DiscussionSortedBy),
+              child: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex, sortBy: widget.DiscussionSortedBy,updateEmailScreen: updateEmailScreen,),
             ),
             Expanded(
               flex: 9,
               child: widget.updatedEmailData != null
-                  ? EmailScreen(id: widget.updatedEmailData!.id,UserphoneNo :widget.updatedEmailData!.phoneNo, ReclamationType : widget.updatedEmailData!.type)
+                  ? emailScreen
                   : Container(),
             ),
           ],
@@ -59,13 +72,11 @@ class _MainScreenState extends State<MainScreen> {
             ),
             Expanded(
               flex: _size.width > 1340 ? 3 : 5,
-              child: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex, sortBy: widget.DiscussionSortedBy),
+              child: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex, sortBy: widget.DiscussionSortedBy,updateEmailScreen: updateEmailScreen,),
             ),
             Expanded(
               flex: _size.width > 1340 ? 8 : 10,
-              child:  widget.updatedEmailData != null
-                  ? EmailScreen(id: widget.updatedEmailData!.id,UserphoneNo :widget.updatedEmailData!.phoneNo, ReclamationType : widget.updatedEmailData!.type)
-                  : Container(),
+              child:  emailScreen,
             ),
           ],
         ),

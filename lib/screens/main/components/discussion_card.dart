@@ -53,13 +53,12 @@ class _DiscussionCardState extends State<DiscussionCard> {
   Widget build(BuildContext context) {
     //  Here the shadow is not showing properly
 
-
     Color c =GetColor();
     return Padding(
       padding: EdgeInsets.symmetric(
           horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
       child: InkWell(
-        onTap: widget.press,
+        onTap: widget.press as void Function()?,
         child: Stack(
           children: [
             Container(

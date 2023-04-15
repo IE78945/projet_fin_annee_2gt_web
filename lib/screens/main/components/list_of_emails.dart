@@ -6,8 +6,6 @@ import 'package:projet_fin_annee_2gt_web/Repository/chat_repository.dart';
 import 'package:projet_fin_annee_2gt_web/components/side_menu.dart';
 import 'package:projet_fin_annee_2gt_web/models/discussions_model.dart';
 import 'package:projet_fin_annee_2gt_web/responsive.dart';
-import 'package:projet_fin_annee_2gt_web/screens/email/email_screen.dart';
-import 'package:projet_fin_annee_2gt_web/screens/main/main_screen.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../../constants.dart';
@@ -16,11 +14,16 @@ import 'discussion_card.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ListOfEmails extends StatefulWidget {
+  final Function(String?, String, String) updateEmailScreen;
+
   // Press "Command + ."
   ListOfEmails({
     Key? key,
     this.clickedDiscussionIndex,
     this.sortBy,
+    required this.updateEmailScreen,
+
+
   }) : super(key: key);
 
   int? clickedDiscussionIndex;
@@ -34,7 +37,6 @@ class _ListOfEmailsState extends State<ListOfEmails> {
 
   late int _activeIndex ;
 
-  final _authRepo = Get.put(AuthentificationRepository());
   final _chatRepo = Get.put(ChatRepository());
 
 
@@ -134,15 +136,13 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                           press: () {
                             print(index);
                             _onCardPressed(index);
-                            setState(() {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      MainScreen(updatedEmailData: _data![index] , clickedDiscussionIndex : index!),
-                                ),
-                              );
-                            });
+                            widget.updateEmailScreen(
+                              _data![index].id,
+                              _data![index].phoneNo,
+                              _data![index].type,
+                            );
+
+
 
                           },
                         ),
