@@ -140,12 +140,9 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                               _data![index].phoneNo,
                               _data![index].type,
                             );
-
-
-
                           },
                         ),
-                      ) : Text("No data");
+                      ) : const Center(child: CircularProgressIndicator(),);
                     }
                 ),
               ),

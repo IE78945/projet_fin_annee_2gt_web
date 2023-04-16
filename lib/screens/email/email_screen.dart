@@ -215,9 +215,8 @@ class _EmailScreenState extends State<EmailScreen> {
                               }
                               else return Container();
                             }
-                            else return Text("no data");
+                            else {return const Center(child: CircularProgressIndicator(),);}
                           },
-
                         ),
                       ),
                     ],
