@@ -9,6 +9,7 @@ import 'package:projet_fin_annee_2gt_web/responsive.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../../constants.dart';
+import '../../email/email_screen.dart';
 import 'discussion_card.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -72,13 +73,25 @@ class _ListOfEmailsState extends State<ListOfEmails> {
   }
 
 
+  void updateDiscussionSortedBy(String sortBy) {
+    setState(() {
+      if (widget.onSortBySelected == sortBy) {
+        // If the same sort by option is clicked again, set the index to -1
+        widget.clickedDiscussionIndex = -1;
+      } else {
+        widget.onSortBySelected = sortBy;
+      }
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       drawer: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 250),
-        child: SideMenu(onSortBySelected: (String ) {  }, ),
+        child: SideMenu(onSortBySelected: updateDiscussionSortedBy, ),
       ),
       body: Container(
         padding: EdgeInsets.only(top: kIsWeb ? kDefaultPadding : 0),

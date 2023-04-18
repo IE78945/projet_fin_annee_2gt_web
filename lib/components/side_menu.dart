@@ -13,13 +13,11 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 class SideMenu extends StatefulWidget {
   int? clickedMenuItemIndex;
   final Function(String) onSortBySelected;
-  //Function(int index) onTagSelected;
 
   SideMenu({
-    this.clickedMenuItemIndex,
     Key? key,
+    this.clickedMenuItemIndex,
     required this.onSortBySelected,
-    //required this.onTagSelected,
   }) : super(key: key);
 
 
