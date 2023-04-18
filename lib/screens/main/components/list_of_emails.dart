@@ -20,13 +20,16 @@ class ListOfEmails extends StatefulWidget {
   ListOfEmails({
     Key? key,
     this.clickedDiscussionIndex,
-    this.sortBy,
+    //this.sortBy,
     required this.updateEmailScreen,
+    required this.onSortBySelected,
 
   }) : super(key: key);
 
   int? clickedDiscussionIndex;
-  String? sortBy;
+  //String? sortBy;
+  String onSortBySelected;
+
 
   @override
   _ListOfEmailsState createState() => _ListOfEmailsState();
@@ -48,6 +51,14 @@ class _ListOfEmailsState extends State<ListOfEmails> {
     });
   }
 
+  String _discussionSortedBy = 'All';
+
+  void updateDiscussionSortedBy(String sortBy) {
+    setState(() {
+      _discussionSortedBy = sortBy;
+    });
+  }
+
   @override
   void initState() {
     if (widget.clickedDiscussionIndex == null) {
@@ -65,7 +76,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
       key: _scaffoldKey,
       drawer: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 250),
-        child: SideMenu(),
+        child: SideMenu(onSortBySelected: (String ) {  }, ),
       ),
       body: Container(
         padding: EdgeInsets.only(top: kIsWeb ? kDefaultPadding : 0),
@@ -124,7 +135,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
               SizedBox(height: kDefaultPadding),
               Expanded(
                 child: StreamBuilder<List<DiscussionModel>>(
-                    stream: GetDiscussionSortedBy(),
+                    stream: GetDiscussionSortedBy(widget.onSortBySelected),
                     builder: (context, snapshot) {
                       var _data = snapshot.data;
                       return snapshot.hasData ? ListView.builder(
@@ -154,10 +165,12 @@ class _ListOfEmailsState extends State<ListOfEmails> {
 
   }
 
-  GetDiscussionSortedBy() {
-    if (widget.sortBy == "2G (GSM)" || widget.sortBy == "3G (CDMA)" || widget.sortBy == "4G (LTE)" )
-      return _chatRepo.getSortedDiscussionBasedOnGenaration(widget.sortBy);
-
+  GetDiscussionSortedBy(String sortBy) {
+    if (sortBy == "2G (GSM)" || sortBy == "3G (CDMA)" || sortBy == "4G (LTE)" )
+      return _chatRepo.getSortedDiscussionBasedOnGenaration(sortBy);
+    else if (sortBy == "Technical Request" || sortBy=="Commercial Request"){
+      return _chatRepo.getSortedDiscussionBasedOnType(sortBy);
+    }
     else return _chatRepo.getAllDiscussion();
 
 

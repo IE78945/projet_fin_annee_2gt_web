@@ -3,20 +3,26 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:projet_fin_annee_2gt_web/Repository/chat_repository.dart';
 import 'package:projet_fin_annee_2gt_web/responsive.dart';
+import 'package:websafe_svg/websafe_svg.dart';
 
 import '../constants.dart';
 import 'side_menu_item.dart';
-import 'tags.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class SideMenu extends StatefulWidget {
+  int? clickedMenuItemIndex;
+  final Function(String) onSortBySelected;
+  //Function(int index) onTagSelected;
+
   SideMenu({
     this.clickedMenuItemIndex,
     Key? key,
+    required this.onSortBySelected,
+    //required this.onTagSelected,
   }) : super(key: key);
 
-  int? clickedMenuItemIndex;
+
 
   @override
   State<SideMenu> createState() => _SideMenuState();
@@ -36,6 +42,16 @@ class _SideMenuState extends State<SideMenu> {
   bool isItemSelected(int index){
     if (_activeIndex == index) return true;
     else return false;
+  }
+  bool isArrowTagClicked = true;
+
+  void ShowTags() {
+    setState(() {
+      if (!isArrowTagClicked)
+        isArrowTagClicked = true;
+      else
+        isArrowTagClicked = false;
+    });
   }
 
   @override
@@ -82,6 +98,8 @@ class _SideMenuState extends State<SideMenu> {
                         return SideMenuItem(
                           press: () {
                             _onMenuItemPress(0);
+                            widget.onSortBySelected('All');
+                            //widget.onTagSelected(-1);
                           },
                           title: "Inbox",
                           iconSrc: "assets/Icons/Inbox.svg",
@@ -92,6 +110,8 @@ class _SideMenuState extends State<SideMenu> {
                         return SideMenuItem(
                           press: () {
                             _onMenuItemPress(0);
+                            widget.onSortBySelected('All');
+                            //widget.onTagSelected(-1);
                           },
                           title: "Inbox",
                           iconSrc: "assets/Icons/Inbox.svg",
@@ -104,6 +124,8 @@ class _SideMenuState extends State<SideMenu> {
                     else return SideMenuItem(
                       press: () {
                         _onMenuItemPress(0);
+                        widget.onSortBySelected('All');
+                        //widget.onTagSelected(-1);
                       },
                       title: "Inbox",
                       iconSrc: "assets/Icons/Inbox.svg",
@@ -113,6 +135,8 @@ class _SideMenuState extends State<SideMenu> {
                   else return SideMenuItem(
                     press: () {
                       _onMenuItemPress(0);
+                      widget.onSortBySelected('All');
+                      //widget.onTagSelected(-1);
                     },
                     title: "Inbox",
                     iconSrc: "assets/Icons/Inbox.svg",
@@ -123,16 +147,9 @@ class _SideMenuState extends State<SideMenu> {
               ),
               SideMenuItem(
                 press: () {
-                  _onMenuItemPress(1);
-                },
-                title: "Sent",
-                iconSrc: "assets/Icons/Send.svg",
-                isActive: isItemSelected(1),
-
-              ),
-              SideMenuItem(
-                press: () {
                   _onMenuItemPress(2);
+                  widget.onSortBySelected('Technical Request');
+                  //widget.onTagSelected(-1);
                 },
                 title: "Technical",
                 iconSrc: "assets/Icons/File.svg",
@@ -141,6 +158,8 @@ class _SideMenuState extends State<SideMenu> {
               SideMenuItem(
                 press: () {
                   _onMenuItemPress(3);
+                  widget.onSortBySelected('Commercial Request');
+                  //widget.onTagSelected(-1);
                 },
                 title: "Commercial",
                 iconSrc: "assets/Icons/Trash.svg",
@@ -149,10 +168,103 @@ class _SideMenuState extends State<SideMenu> {
               ),
 
               SizedBox(height: kDefaultPadding * 2),
+
+
               // Tags
-              Tags(),
+    Column(
+    children: [
+    Row(
+    children: [
+    MaterialButton(
+    padding: EdgeInsets.all(10),
+    minWidth: 40,
+    onPressed: () {
+    ShowTags();
+    },
+    child: WebsafeSvg.asset("assets/Icons/Angle down.svg", width: 16),
+    ),
+
+    SizedBox(width: kDefaultPadding / 4),
+    WebsafeSvg.asset("assets/Icons/Markup.svg", width: 20),
+    SizedBox(width: kDefaultPadding / 2),
+    Text(
+    "Tags",
+    style: Theme.of(context)
+        .textTheme
+        .button
+        ?.copyWith(color: kGrayColor),
+    ),
+    Spacer(),
+    ],
+    ),
+    SizedBox(height: kDefaultPadding / 2),
+    Visibility(
+    visible: isArrowTagClicked,
+    child: Column(
+    children: [
+    buildTag(context, color: TagColor2G , title: "GSM"),
+    buildTag(context, color: TagColor3G, title: "WCDMA"),
+    buildTag(context, color: TagColor4G, title: "LTE"),
+    ],
+    ),
+    )
+
+
+    ],
+    ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+
+  InkWell buildTag(BuildContext context,
+      {required Color color, required String title}) {
+    return InkWell(
+      onTap: () {
+        switch(title) {
+          case "GSM": {
+            widget.onSortBySelected('2G (GSM)');
+            //widget.onTagSelected(-1);
+          }
+          break;
+
+          case "WCDMA": {
+            widget.onSortBySelected('3G (CDMA)');
+            //widget.onTagSelected(-1);
+          }
+          break;
+
+          case "LTE": {
+            widget.onSortBySelected('4G (LTE)');
+            //widget.onTagSelected(-1);
+          }
+          break;
+
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(kDefaultPadding * 1.5, 10, 0, 10),
+        child: Row(
+          children: [
+            ColorFiltered(
+              colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+              child: WebsafeSvg.asset(
+                "assets/Icons/Markup filled.svg",
+                height: 18,
+              ),
+            ),
+            SizedBox(width: kDefaultPadding / 2),
+            Text(
+              title,
+              style: Theme.of(context)
+                  .textTheme
+                  .button
+                  ?.copyWith(color: kGrayColor),
+            ),
+          ],
         ),
       ),
     );

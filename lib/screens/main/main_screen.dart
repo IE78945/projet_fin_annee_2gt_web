@@ -7,15 +7,7 @@ import 'components/list_of_emails.dart';
 
 class MainScreen extends StatefulWidget {
 
-  MainScreen({
-    this.updatedEmailData,
-    this.clickedDiscussionIndex,
-    this.DiscussionSortedBy,
-  });
-
-  final DiscussionModel? updatedEmailData;
-  final int? clickedDiscussionIndex;
-  final String? DiscussionSortedBy;
+  MainScreen();
 
 
   @override
@@ -38,6 +30,27 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  String _discussionSortedBy = 'All';
+  int _clickedDiscussionIndex = -1;
+
+  void updateDiscussionSortedBy(String sortBy) {
+    setState(() {
+      if (_discussionSortedBy == sortBy) {
+        // If the same sort by option is clicked again, set the index to -1
+        _clickedDiscussionIndex = -1;
+      } else {
+        _discussionSortedBy = sortBy;
+      }
+
+    });
+  }
+
+
+  void updateClickedDiscussionIndex(int index) {
+    setState(() {
+      _clickedDiscussionIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,15 +60,19 @@ class _MainScreenState extends State<MainScreen> {
       body: Responsive(
         // Let's work on our mobile part
         mobile: ListOfEmails(
-          clickedDiscussionIndex : widget.clickedDiscussionIndex,
-          sortBy: widget.DiscussionSortedBy,
+          clickedDiscussionIndex : _clickedDiscussionIndex,
           updateEmailScreen: updateEmailScreen,
+          onSortBySelected: _discussionSortedBy,
         ),
         tablet: Row(
           children: [
             Expanded(
               flex: 6,
-              child: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex, sortBy: widget.DiscussionSortedBy,updateEmailScreen: updateEmailScreen,),
+              child: ListOfEmails(
+                clickedDiscussionIndex : _clickedDiscussionIndex,
+                onSortBySelected: _discussionSortedBy,
+                updateEmailScreen: updateEmailScreen,
+              ),
             ),
             Expanded(
               flex: 9,
@@ -69,11 +86,18 @@ class _MainScreenState extends State<MainScreen> {
             // Now there is no error if our width is less then 1340
             Expanded(
               flex: _size.width > 1340 ? 2 : 4,
-              child: SideMenu(),
+              child: SideMenu(
+                //onTagSelected: updateClickedDiscussionIndex,
+                onSortBySelected: updateDiscussionSortedBy,
+              ),
             ),
             Expanded(
               flex: _size.width > 1340 ? 3 : 5,
-              child: ListOfEmails(clickedDiscussionIndex : widget.clickedDiscussionIndex, sortBy: widget.DiscussionSortedBy,updateEmailScreen: updateEmailScreen,),
+              child: ListOfEmails(
+              clickedDiscussionIndex : _clickedDiscussionIndex,
+              onSortBySelected: _discussionSortedBy,
+              updateEmailScreen: updateEmailScreen,
+            ),
             ),
             Expanded(
               flex: _size.width > 1340 ? 8 : 10,
