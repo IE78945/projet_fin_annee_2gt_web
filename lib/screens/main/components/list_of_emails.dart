@@ -67,7 +67,6 @@ class _ListOfEmailsState extends State<ListOfEmails> {
     }
     else {
       _activeIndex = widget.clickedDiscussionIndex!;
-      print("/////////////////////"+widget.clickedDiscussionIndex.toString());
     }
     super.initState();
   }
@@ -147,9 +146,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                           isActive: Responsive.isMobile(context) ? false : index == _activeIndex,
                           data: _data![index],
                           press: () {
-                            print("INDEX :" + index.toString());
                             _onCardPressed(index);
-                            print ("ACTIVE INDEX :" + _activeIndex.toString());
                             widget.updateEmailScreen(
                               _data![index].id,
                               _data![index].phoneNo,

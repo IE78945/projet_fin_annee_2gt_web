@@ -16,7 +16,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
 
-  Widget emailScreen = EmailScreen(id: "", UserphoneNo: "", ReclamationType: "");
+  Widget emailScreen = EmailScreen(id: "", UserphoneNo: "", ReclamationType: "",);
 
 
 
@@ -35,6 +35,7 @@ class _MainScreenState extends State<MainScreen> {
 
   void updateDiscussionSortedBy(String sortBy) {
     setState(() {
+      emailScreen = EmailScreen(id: "", UserphoneNo: "", ReclamationType: "",);
       if (_discussionSortedBy == sortBy) {
         // If the same sort by option is clicked again, set the index to -1
         _clickedDiscussionIndex = -1;
@@ -44,7 +45,6 @@ class _MainScreenState extends State<MainScreen> {
 
     });
   }
-
 
   void updateClickedDiscussionIndex(int index) {
     setState(() {
