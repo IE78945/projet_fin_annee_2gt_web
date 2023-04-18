@@ -99,7 +99,6 @@ class _SideMenuState extends State<SideMenu> {
                           press: () {
                             _onMenuItemPress(0);
                             widget.onSortBySelected('All');
-                            //widget.onTagSelected(-1);
                           },
                           title: "Inbox",
                           iconSrc: "assets/Icons/Inbox.svg",
@@ -111,7 +110,6 @@ class _SideMenuState extends State<SideMenu> {
                           press: () {
                             _onMenuItemPress(0);
                             widget.onSortBySelected('All');
-                            //widget.onTagSelected(-1);
                           },
                           title: "Inbox",
                           iconSrc: "assets/Icons/Inbox.svg",
@@ -125,7 +123,6 @@ class _SideMenuState extends State<SideMenu> {
                       press: () {
                         _onMenuItemPress(0);
                         widget.onSortBySelected('All');
-                        //widget.onTagSelected(-1);
                       },
                       title: "Inbox",
                       iconSrc: "assets/Icons/Inbox.svg",
@@ -136,7 +133,6 @@ class _SideMenuState extends State<SideMenu> {
                     press: () {
                       _onMenuItemPress(0);
                       widget.onSortBySelected('All');
-                      //widget.onTagSelected(-1);
                     },
                     title: "Inbox",
                     iconSrc: "assets/Icons/Inbox.svg",
@@ -171,18 +167,16 @@ class _SideMenuState extends State<SideMenu> {
 
 
               // Tags
-    Column(
-    children: [
-    Row(
-    children: [
-    MaterialButton(
-    padding: EdgeInsets.all(10),
-    minWidth: 40,
-    onPressed: () {
-    ShowTags();
-    },
-    child: WebsafeSvg.asset("assets/Icons/Angle down.svg", width: 16),
-    ),
+              Column(
+                children: [
+                Row(
+                  children: [
+                  MaterialButton(
+                    padding: EdgeInsets.all(10),
+                    minWidth: 40,
+                    onPressed: () { ShowTags(); },
+                    child: WebsafeSvg.asset("assets/Icons/Angle down.svg", width: 16),
+                  ),
 
     SizedBox(width: kDefaultPadding / 4),
     WebsafeSvg.asset("assets/Icons/Markup.svg", width: 20),
@@ -227,19 +221,19 @@ class _SideMenuState extends State<SideMenu> {
         switch(title) {
           case "GSM": {
             widget.onSortBySelected('2G (GSM)');
-            //widget.onTagSelected(-1);
+            _onMenuItemPress(-1);
           }
           break;
 
           case "WCDMA": {
             widget.onSortBySelected('3G (CDMA)');
-            //widget.onTagSelected(-1);
+            _onMenuItemPress(-1);
           }
           break;
 
           case "LTE": {
             widget.onSortBySelected('4G (LTE)');
-            //widget.onTagSelected(-1);
+            _onMenuItemPress(-1);
           }
           break;
 
