@@ -14,21 +14,17 @@ import 'discussion_card.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ListOfEmails extends StatefulWidget {
+  int? clickedDiscussionIndex;
+  String onSortBySelected;
   final Function(String?, String, String) updateEmailScreen;
 
-  // Press "Command + ."
   ListOfEmails({
     Key? key,
     this.clickedDiscussionIndex,
-    //this.sortBy,
-    required this.updateEmailScreen,
     required this.onSortBySelected,
+    required this.updateEmailScreen,
 
   }) : super(key: key);
-
-  int? clickedDiscussionIndex;
-  //String? sortBy;
-  String onSortBySelected;
 
 
   @override
@@ -41,9 +37,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
 
   final _chatRepo = Get.put(ChatRepository());
 
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
 
   void _onCardPressed(int index) {
     setState(() {
@@ -51,24 +45,33 @@ class _ListOfEmailsState extends State<ListOfEmails> {
     });
   }
 
-  String _discussionSortedBy = 'All';
+  @override
+  void didUpdateWidget(covariant ListOfEmails oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.onSortBySelected != widget.onSortBySelected) {
+      updateActiveIndex();
+    }
+  }
 
-  void updateDiscussionSortedBy(String sortBy) {
+  void updateActiveIndex() {
     setState(() {
-      _discussionSortedBy = sortBy;
+      _activeIndex = widget.clickedDiscussionIndex ?? -1;
     });
   }
 
+
   @override
   void initState() {
-    if (widget.clickedDiscussionIndex == null) {
+    if (widget.clickedDiscussionIndex == null || widget.clickedDiscussionIndex==-1) {
       _activeIndex = -1;
     }
     else {
       _activeIndex = widget.clickedDiscussionIndex!;
+      print("/////////////////////"+widget.clickedDiscussionIndex.toString());
     }
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -144,8 +147,9 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                           isActive: Responsive.isMobile(context) ? false : index == _activeIndex,
                           data: _data![index],
                           press: () {
-                            print(index);
+                            print("INDEX :" + index.toString());
                             _onCardPressed(index);
+                            print ("ACTIVE INDEX :" + _activeIndex.toString());
                             widget.updateEmailScreen(
                               _data![index].id,
                               _data![index].phoneNo,
@@ -165,6 +169,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
 
   }
 
+
   GetDiscussionSortedBy(String sortBy) {
     if (sortBy == "2G (GSM)" || sortBy == "3G (CDMA)" || sortBy == "4G (LTE)" )
       return _chatRepo.getSortedDiscussionBasedOnGenaration(sortBy);
@@ -172,8 +177,6 @@ class _ListOfEmailsState extends State<ListOfEmails> {
       return _chatRepo.getSortedDiscussionBasedOnType(sortBy);
     }
     else return _chatRepo.getAllDiscussion();
-
-
 
   }
 }
