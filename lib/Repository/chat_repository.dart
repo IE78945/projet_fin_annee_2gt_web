@@ -21,7 +21,7 @@ class ChatRepository extends GetxController{
 
   // Fetch All discussions in firestore
   Stream<List<DiscussionModel>> getAllDiscussion() {
-    var _ref = _db.collection("Chats");
+    var _ref = _db.collection("Chats").orderBy("isLastMessageSeenByAdmin").orderBy("LastMessageDate", descending: true);
     return _ref.snapshots().map((querySnapshot) {
       return querySnapshot.docs.map((doc) {
             return DiscussionModel.fromSnapshot(doc);
@@ -31,7 +31,7 @@ class ChatRepository extends GetxController{
 
   // Fetch discussions in firestore based on type
   Stream<List<DiscussionModel>> getSortedDiscussionBasedOnType(String? type) {
-    var _ref = _db.collection("Chats").where("Type" , isEqualTo: type);
+    var _ref = _db.collection("Chats").where("Type" , isEqualTo: type).orderBy("isLastMessageSeenByAdmin").orderBy("LastMessageDate", descending: true);
     return _ref.snapshots().map((querySnapshot) {
       return querySnapshot.docs.map((doc) {
         return DiscussionModel.fromSnapshot(doc);
@@ -41,7 +41,7 @@ class ChatRepository extends GetxController{
 
   // Fetch discussions in firestore based on generation
   Stream<List<DiscussionModel>> getSortedDiscussionBasedOnGenaration(String? generation) {
-    var _ref = _db.collection("Chats").where("Generation" , isEqualTo: generation);
+    var _ref = _db.collection("Chats").where("Generation" , isEqualTo: generation).orderBy("isLastMessageSeenByAdmin").orderBy("LastMessageDate", descending: true);
     return _ref.snapshots().map((querySnapshot) {
       return querySnapshot.docs.map((doc) {
         print(doc);
@@ -71,14 +71,14 @@ class ChatRepository extends GetxController{
 
   // Count unread messages by admin
   Future<int> getUnreadMessagesNumber() async{
-    AggregateQuerySnapshot num = await _db.collection("Chats").where("LastMessageStatusAdmin",isEqualTo: false).count().get();
+    AggregateQuerySnapshot num = await _db.collection("Chats").where("isLastMessageSeenByAdmin",isEqualTo: false).count().get();
     return num.count;
   }
 
 
   // Update LastMessageStatusAdmin to true
   MessageSeenByAdmin(String? DiscussionId) async {
-    await _db.collection("Chats").doc(DiscussionId).update({'LastMessageStatusAdmin': true});
+    await _db.collection("Chats").doc(DiscussionId).update({'isLastMessageSeenByAdmin': true});
   }
 
 
