@@ -120,34 +120,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                 ),
               ),
               SizedBox(height: kDefaultPadding),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                child: Row(
-                  children: [
-                    WebsafeSvg.asset(
-                      "assets/Icons/Angle down.svg",
-                      width: 16,
-                        colorFilter:ColorFilter.mode(Colors.black, BlendMode.modulate)
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      "Sort by date",
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                    Spacer(),
-                    MaterialButton(
-                      minWidth: 20,
-                      onPressed: () {},
-                      child: WebsafeSvg.asset(
-                        "assets/Icons/Sort.svg",
-                        width: 16,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: kDefaultPadding),
+
               Expanded(
                 child: StreamBuilder<List<DiscussionModel>>(
                     stream: GetDiscussionSortedBy(widget.onSortBySelected),
