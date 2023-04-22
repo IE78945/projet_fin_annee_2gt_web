@@ -4,6 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projet_fin_annee_2gt_web/screens/main/main_screen.dart';
+
+import '../screens/onboding/onboding_screen.dart';
 
 
 class AuthentificationRepository extends GetxController {
@@ -25,7 +28,7 @@ class AuthentificationRepository extends GetxController {
    _setInitialScreen(User? user) {
     if(isFirstTimeOpeningApp){
       isFirstTimeOpeningApp = false;
-     // user == null ? Get.offAll(() => const OnboardingScreen()) : Get.offAll(() => const EntryPoint());
+     user == null ? Get.offAll(() => const OnboardingScreen()) : Get.offAll(() => MainScreen());
 
     }
   }

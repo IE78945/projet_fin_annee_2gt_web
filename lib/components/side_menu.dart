@@ -5,7 +5,9 @@ import 'package:projet_fin_annee_2gt_web/Repository/chat_repository.dart';
 import 'package:projet_fin_annee_2gt_web/responsive.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
+import '../Repository/authentification_repository.dart';
 import '../constants.dart';
+import '../screens/onboding/onboding_screen.dart';
 import 'side_menu_item.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -204,6 +206,32 @@ class _SideMenuState extends State<SideMenu> {
 
     ],
     ),
+              SizedBox(height: kDefaultPadding * 2),
+              SideMenuItem(
+                press: () {
+                  setState(() {
+                    AuthentificationRepository.instance.logout();
+                    Get.snackbar(
+                      "success",
+                      "Logged out successfully",
+                      snackPosition: SnackPosition.TOP,
+                      backgroundColor: Colors.white.withOpacity(0.7),
+                      colorText: Colors.green,
+                    );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const OnboardingScreen(),
+                      ),
+                    );
+                  });
+                },
+                title: "Sign out",
+                iconSrc: "assets/Icons/Trash.svg",
+                isActive: isItemSelected(3),
+                showBorder: false,
+              ),
+
             ],
           ),
         ),
