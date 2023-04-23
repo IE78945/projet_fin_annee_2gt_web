@@ -228,7 +228,6 @@ class _SideMenuState extends State<SideMenu> {
                 },
                 title: "Sign out",
                 iconSrc: "assets/Icons/Trash.svg",
-                isActive: isItemSelected(3),
                 showBorder: false,
               ),
 

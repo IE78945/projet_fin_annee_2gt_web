@@ -71,22 +71,8 @@ class AuthentificationRepository extends GetxController {
   Future<bool> LoginUserWithEmailAndPassword(String email, String password) async {
     try{
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      Get.snackbar(
-        "success",
-        "Logged in successfully",
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.white.withOpacity(0.7),
-        colorText: Colors.green,
-      );
       return true;
     }on FirebaseAuthException catch(e){
-      Get.snackbar(
-        "Error",
-        e.message.toString(),
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.white.withOpacity(0.7),
-        colorText: Colors.red,
-      );
       return false;
     }catch(_){
       return false;}
@@ -117,12 +103,5 @@ class AuthentificationRepository extends GetxController {
 
    Future<void> logout() async {
      await _auth.signOut();
-     Get.snackbar(
-       "success",
-       "Logged out successfully",
-       snackPosition: SnackPosition.TOP,
-       backgroundColor: Colors.white.withOpacity(0.7),
-       colorText: Colors.green,
-     );
    }
  }
