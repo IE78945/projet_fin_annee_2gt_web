@@ -12,8 +12,8 @@ void showForgotPasswordCustomDialog(BuildContext context, {required ValueChanged
     pageBuilder: (_, __, ___) {
       return Center(
         child: Container(
-          height: 440,
-          margin: const EdgeInsets.symmetric(horizontal: 16),
+          height: 340,
+          margin: const EdgeInsets.symmetric(horizontal: 300),
           padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.95),

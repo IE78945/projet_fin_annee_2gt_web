@@ -20,8 +20,8 @@ class AnimatedBtn extends StatelessWidget {
     return GestureDetector(
       onTap: press,
       child: SizedBox(
-        height: MediaQuery.of(context).size.height *0.17,
-        width: MediaQuery.of(context).size.width *0.4,
+        height: MediaQuery.of(context).size.height *0.1,
+        width: MediaQuery.of(context).size.width *0.2,
         child: Stack(
           children: [
             RiveAnimation.asset(

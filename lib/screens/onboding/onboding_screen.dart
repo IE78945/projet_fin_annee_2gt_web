@@ -42,8 +42,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         children: [
           Positioned(
             width: MediaQuery.of(context).size.width * 1.7,
-            left: 100,
-            bottom: 100,
+            left: 200,
+            bottom: -400,
             child: Image.asset(
               "assets/Backgrounds/Spline.png",
             ),
@@ -54,8 +54,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: const SizedBox(),
             ),
           ),
-          const RiveAnimation.asset(
+          RiveAnimation.asset(
             "assets/RiveAssets/shapes.riv",
+            alignment: Alignment.bottomRight,
           ),
           Positioned.fill(
             child: BackdropFilter(
@@ -70,7 +71,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             duration: const Duration(milliseconds: 260),
             child: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
+                padding:  EdgeInsets.only(left: 32,right: MediaQuery.of(context).size.width*0.5),
                 child: Flex(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   direction: Axis.vertical,
@@ -89,7 +90,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               height: 1.2,
                             ),
                           ),
-                          SizedBox(height: 16),
+                          SizedBox(height: 20),
                           Text(
                             "Using our app is easy! Simply provide your location and a brief description of the problem you're experiencing, and we'll take care of the rest. ",
                           ),
@@ -151,7 +152,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ],
                     ),
 
-                    SizedBox(height: 20,),
+                    SizedBox(height: 30,),
                     Text(
                         "Your privacy and security are our top priorities.We will never share your personal information with third parties."),
                     Spacer(),

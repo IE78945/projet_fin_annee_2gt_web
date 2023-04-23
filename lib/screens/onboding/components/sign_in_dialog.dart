@@ -13,8 +13,8 @@ void showSignInCustomDialog(BuildContext context, {required ValueChanged onValue
     pageBuilder: (_, __, ___) {
       return Center(
         child: Container(
-          height: 543,
-          margin: const EdgeInsets.symmetric(horizontal: 16),
+          height: 455,
+          margin: const EdgeInsets.symmetric(horizontal: 260),
           padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.95),
