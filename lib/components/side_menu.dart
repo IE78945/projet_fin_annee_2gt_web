@@ -79,8 +79,8 @@ class _SideMenuState extends State<SideMenu> {
               Row(
                 children: [
                   Image.asset(
-                    "assets/images/Logo Outlook.png",
-                    width: 46,
+                    "assets/images/ico.png",
+                    width: 70,
                   ),
                   Spacer(),
                   // We don't want to show this close button on Desktop mood
