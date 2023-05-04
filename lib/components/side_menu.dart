@@ -78,9 +78,12 @@ class _SideMenuState extends State<SideMenu> {
             children: [
               Row(
                 children: [
-                  Image.asset(
-                    "assets/images/Reclami.png",
-                    width: 150,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(
+                      "assets/images/Reclami1.png",
+                      width: 100,
+                    ),
                   ),
                   Spacer(),
                   // We don't want to show this close button on Desktop mood
