@@ -248,22 +248,37 @@ class _EmailScreenState extends State<EmailScreen> {
                                                         ),
                                                         SizedBox(height: kDefaultPadding/2),
                                                         Table(
-                                                  border: TableBorder.all(color: Colors.black54),
+                                                          border: TableBorder.all(
+                                                            color: Colors.black54,
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                  ),
                                                   // Create a table with one row per entry in the map
                                                   children: items.map((entry) {
                                                         return TableRow(
+                                                            decoration: BoxDecoration(
+                                                            color: Colors.grey[200],
+                                                            ),
                                                           // Each row has two cells: one for the key, one for the value
                                                           children: [
                                                             TableCell(
                                                               child: Padding(
                                                                 padding: EdgeInsets.all(8.0),
-                                                                child: Text('${entry.key}'),
+                                                                child: Center(
+                                                                  child: Text(
+                                                                    '${entry.key}'.toUpperCase(),
+                                                                    style: TextStyle(
+                                                                      height: 1.5,
+                                                                      color: Colors.black,
+                                                                      fontWeight: FontWeight.w900,
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                               ),
                                                             ),
                                                             TableCell(
                                                               child: Padding(
                                                                 padding: EdgeInsets.all(8.0),
-                                                                child: Text('${entry.value}'),
+                                                                child: Center(child: Text('${entry.value}')),
                                                               ),
                                                             ),
                                                           ],
