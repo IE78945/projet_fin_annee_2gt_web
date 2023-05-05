@@ -60,6 +60,7 @@ class _DiscussionCardState extends State<DiscussionCard> {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
@@ -109,6 +110,8 @@ class _DiscussionCardState extends State<DiscussionCard> {
                     style: Theme.of(context).textTheme.caption?.copyWith(
                           height: 1.5,
                           color: widget.isActive ? Colors.white70 : null,
+                          fontWeight: FontWeight.w500,
+                      fontSize: 14,
                         ),
                   )
                 ],

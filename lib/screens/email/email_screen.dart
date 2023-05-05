@@ -17,7 +17,7 @@ import 'package:websafe_svg/websafe_svg.dart';
 import '../../constants.dart';
 import 'components/header.dart';
 import 'package:intl/intl.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 
 
 class EmailScreen extends StatefulWidget {
@@ -100,8 +100,7 @@ class _EmailScreenState extends State<EmailScreen> {
                                       children: [
                                         Expanded(
                                           child: Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 widget.ReclamationType.toString(),
@@ -132,6 +131,25 @@ class _EmailScreenState extends State<EmailScreen> {
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
+                                              Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    "assets/Icons/Message.svg",
+                                                    width: 30,
+                                                  ),
+                                                  SizedBox(width: kDefaultPadding/2),
+                                                  Text(
+                                                    "Message",
+                                                    style: TextStyle(
+                                                      height: 1.5,
+                                                      color: Colors.black,
+                                                      fontWeight: FontWeight.w900,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: kDefaultPadding / 2),
                                               Text(
                                                 message.message,
                                                 style: TextStyle(
@@ -149,12 +167,38 @@ class _EmailScreenState extends State<EmailScreen> {
                                                 onTap: () {
                                                   launchGoogleMaps(message.location!);
                                                 },
-                                                child: Text(
-                                                  '${message.location!.latitude}, ${message.location!.longitude}',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  textAlign: TextAlign.center,
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        SvgPicture.asset(
+                                                          "assets/Icons/localize.svg",
+                                                          width: 30,
+                                                        ),
+                                                        SizedBox(width: kDefaultPadding/2),
+                                                        Text(
+                                                          "Location",
+                                                          style: TextStyle(
+                                                            height: 1.5,
+                                                            color: Colors.black,
+                                                            fontWeight: FontWeight.w900,
+                                                            fontSize: 16,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: kDefaultPadding/2),
+                                                    Text(
+                                                      "Latitude : "+'${message.location!.latitude}'+"\nLongitude : " +'${message.location!.longitude}',
+                                                      style: TextStyle(
+                                                        height: 1.5,
+                                                        color: Color(0xFF4D5875),
+                                                        fontWeight: FontWeight.w300,
+                                                      ),
+
+                                                    ),
+                                                  ],
                                                 ),
                                               ):Text(""),
 
@@ -162,14 +206,19 @@ class _EmailScreenState extends State<EmailScreen> {
 
                                               isTechnicalRequest?
                                               //Text("Latitude : "+message.location!.latitude.toString()):Text(""),
-                                              ElevatedButton(
-                                                onPressed: () {launchGoogleMaps(message.location!);},
-                                                child: Text(
-                                                  'View location on Google Maps',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
+                                              Center(
+                                                child: ElevatedButton(
+                                                  onPressed: () {launchGoogleMaps(message.location!);},
+                                                  style: ButtonStyle(
+                                                    backgroundColor: MaterialStateProperty.all<Color>( kPrimaryColor),
                                                   ),
-                                                  textAlign: TextAlign.center,
+                                                  child: Text(
+                                                    'View location on Google Maps',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
                                                 ),
                                               ):Text(""),
 
@@ -177,29 +226,52 @@ class _EmailScreenState extends State<EmailScreen> {
                                               //tableau
                                               SizedBox(
                                                 child: (widget.ReclamationType == "Technical Request")
-                                                    ? Table(
+                                                    ? Column(
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            SvgPicture.asset(
+                                                              "assets/Icons/Data.svg",
+                                                              width: 30,
+                                                            ),
+                                                            SizedBox(width: kDefaultPadding/2),
+                                                            Text(
+                                                              "Network parameters",
+                                                              style: TextStyle(
+                                                                height: 1.5,
+                                                                color: Colors.black,
+                                                                fontWeight: FontWeight.w900,
+                                                                fontSize: 16,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        SizedBox(height: kDefaultPadding/2),
+                                                        Table(
                                                   border: TableBorder.all(color: Colors.black54),
                                                   // Create a table with one row per entry in the map
                                                   children: items.map((entry) {
-                                                    return TableRow(
-                                                      // Each row has two cells: one for the key, one for the value
-                                                      children: [
-                                                        TableCell(
-                                                          child: Padding(
-                                                            padding: EdgeInsets.all(8.0),
-                                                            child: Text('${entry.key}'),
-                                                          ),
-                                                        ),
-                                                        TableCell(
-                                                          child: Padding(
-                                                            padding: EdgeInsets.all(8.0),
-                                                            child: Text('${entry.value}'),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    );
+                                                        return TableRow(
+                                                          // Each row has two cells: one for the key, one for the value
+                                                          children: [
+                                                            TableCell(
+                                                              child: Padding(
+                                                                padding: EdgeInsets.all(8.0),
+                                                                child: Text('${entry.key}'),
+                                                              ),
+                                                            ),
+                                                            TableCell(
+                                                              child: Padding(
+                                                                padding: EdgeInsets.all(8.0),
+                                                                child: Text('${entry.value}'),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        );
                                                   }).toList(),
-                                                )
+                                                ),
+                                                      ],
+                                                    )
                                                     : Text(""),
                                               ),
                                               //
