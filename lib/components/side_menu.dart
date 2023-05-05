@@ -146,70 +146,43 @@ class _SideMenuState extends State<SideMenu> {
               ),
               SideMenuItem(
                 press: () {
-                  _onMenuItemPress(2);
-                  widget.onSortBySelected('Technical Request');
-                  //widget.onTagSelected(-1);
-                },
-                title: "Technical",
-                iconSrc: "assets/Icons/File.svg",
-                isActive: isItemSelected(2),
-              ),
-              SideMenuItem(
-                press: () {
-                  _onMenuItemPress(3);
+                  _onMenuItemPress(1);
                   widget.onSortBySelected('Commercial Request');
                   //widget.onTagSelected(-1);
                 },
                 title: "Commercial",
-                iconSrc: "assets/Icons/Trash.svg",
-                isActive: isItemSelected(3),
-                showBorder: false,
+                iconSrc: "assets/Icons/Comm.svg",
+                isActive: isItemSelected(1),
               ),
 
-              SizedBox(height: kDefaultPadding * 2),
-
+              SideMenuItem(
+                press: () {
+                  _onMenuItemPress(2);
+                  widget.onSortBySelected('Technical Request');
+                  ShowTags();
+                },
+                title: "Technical",
+                iconSrc: "assets/Icons/Tech.svg",
+                isActive: isItemSelected(2),
+                showBorder: true,
+              ),
 
               // Tags
               Column(
                 children: [
-                Row(
-                  children: [
-                  MaterialButton(
-                    padding: EdgeInsets.all(10),
-                    minWidth: 40,
-                    onPressed: () { ShowTags(); },
-                    child: WebsafeSvg.asset("assets/Icons/Angle down.svg", width: 16),
+                  SizedBox(height: kDefaultPadding / 2),
+                  Visibility(
+                    visible: isItemSelected(2),
+                    child: Column(
+                      children: [
+                        buildTag(context, color: TagColor2G , title: "GSM"),
+                        buildTag(context, color: TagColor3G, title: "WCDMA"),
+                        buildTag(context, color: TagColor4G, title: "LTE"),
+                      ],
+                    ),
                   ),
-
-    SizedBox(width: kDefaultPadding / 4),
-    WebsafeSvg.asset("assets/Icons/Markup.svg", width: 20),
-    SizedBox(width: kDefaultPadding / 2),
-    Text(
-    "Tags",
-    style: Theme.of(context)
-        .textTheme
-        .button
-        ?.copyWith(color: kGrayColor),
-    ),
-    Spacer(),
-    ],
-    ),
-    SizedBox(height: kDefaultPadding / 2),
-    Visibility(
-    visible: isArrowTagClicked,
-    child: Column(
-    children: [
-    buildTag(context, color: TagColor2G , title: "GSM"),
-    buildTag(context, color: TagColor3G, title: "WCDMA"),
-    buildTag(context, color: TagColor4G, title: "LTE"),
-    ],
-    ),
-    )
-
-
-    ],
-    ),
-              SizedBox(height: kDefaultPadding * 2),
+                ],
+              ),
               SideMenuItem(
                 press: () {
                   setState(() {
@@ -230,7 +203,7 @@ class _SideMenuState extends State<SideMenu> {
                   });
                 },
                 title: "Sign out",
-                iconSrc: "assets/Icons/Trash.svg",
+                iconSrc: "assets/Icons/Logout.svg",
                 showBorder: false,
               ),
 
@@ -249,19 +222,19 @@ class _SideMenuState extends State<SideMenu> {
         switch(title) {
           case "GSM": {
             widget.onSortBySelected('2G (GSM)');
-            _onMenuItemPress(-1);
+            _onMenuItemPress(2);
           }
           break;
 
           case "WCDMA": {
             widget.onSortBySelected('3G (CDMA)');
-            _onMenuItemPress(-1);
+            _onMenuItemPress(2);
           }
           break;
 
           case "LTE": {
             widget.onSortBySelected('4G (LTE)');
-            _onMenuItemPress(-1);
+            _onMenuItemPress(2);
           }
           break;
 

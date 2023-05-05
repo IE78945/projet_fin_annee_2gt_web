@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'The Flutter Way',
+      title: 'Reclami Administrator',
       theme: ThemeData(
         scaffoldBackgroundColor: Color(0xFFEEF1F8),
         primarySwatch: Colors.blue,
