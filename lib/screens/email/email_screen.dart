@@ -133,8 +133,8 @@ class _EmailScreenState extends State<EmailScreen> {
                                             children: [
                                               Row(
                                                 children: [
-                                                  SvgPicture.asset(
-                                                    "assets/Icons/Message.svg",
+                                                  Image.asset(
+                                                    "assets/Icons/Message.png",
                                                     width: 30,
                                                   ),
                                                   SizedBox(width: kDefaultPadding/2),
@@ -172,8 +172,8 @@ class _EmailScreenState extends State<EmailScreen> {
                                                   children: [
                                                     Row(
                                                       children: [
-                                                        SvgPicture.asset(
-                                                          "assets/Icons/localize.svg",
+                                                        Image.asset(
+                                                          "assets/Icons/localize.png",
                                                           width: 30,
                                                         ),
                                                         SizedBox(width: kDefaultPadding/2),
