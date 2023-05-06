@@ -1,28 +1,19 @@
-import 'dart:js';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:projet_fin_annee_2gt_web/Repository/chat_repository.dart';
 import 'package:projet_fin_annee_2gt_web/models/Email.dart';
-import 'package:projet_fin_annee_2gt_web/models/discussions_model.dart';
 import 'package:projet_fin_annee_2gt_web/models/messages_model.dart';
-import 'package:projet_fin_annee_2gt_web/screens/main/main_screen.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:websafe_svg/websafe_svg.dart';
-
 import '../../constants.dart';
-import 'components/header.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 
 class EmailScreen extends StatefulWidget {
 
-  EmailScreen({
+  const EmailScreen({
     Key? key,
     this.email,
     this.id,
@@ -62,10 +53,11 @@ class _EmailScreenState extends State<EmailScreen> {
   @override
   Widget build(BuildContext context) {
     late bool isTechnicalRequest;
-    if (widget.ReclamationType == "Technical Request")
+    if (widget.ReclamationType == "Technical Request") {
       isTechnicalRequest = true;
-    else
+    } else {
       isTechnicalRequest = false;
+    }
 
 
     return Scaffold(
@@ -76,11 +68,11 @@ class _EmailScreenState extends State<EmailScreen> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.all(kDefaultPadding),
+                  padding: const EdgeInsets.all(kDefaultPadding),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(width: kDefaultPadding),
+                      const SizedBox(width: kDefaultPadding),
                       Expanded(
                         child: FutureBuilder(
                           future: GetMessage(),
@@ -90,8 +82,9 @@ class _EmailScreenState extends State<EmailScreen> {
                                 MessageModel message = snapshot.data as MessageModel;
                                 // Convert the map into a list of key-value pairs
                                 List<MapEntry<dynamic, dynamic>> items =[];
-                                if (widget.ReclamationType == "Technical Request")
+                                if (widget.ReclamationType == "Technical Request") {
                                   items = message.phoneData!.entries.toList();
+                                }
 
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,25 +97,25 @@ class _EmailScreenState extends State<EmailScreen> {
                                             children: [
                                               Text(
                                                 widget.ReclamationType.toString(),
-                                                style: Theme.of(context).textTheme.headline6,),
+                                                style: Theme.of(context).textTheme.titleLarge,),
                                               Text.rich(
                                                 TextSpan(
                                                   text: widget.UserphoneNo,
-                                                  style: Theme.of(context).textTheme.button,
+                                                  style: Theme.of(context).textTheme.labelLarge,
                                                 ),
                                               ),
                                             ],
                                           ),
                                         ),
-                                        SizedBox(width: kDefaultPadding / 2),
+                                        const SizedBox(width: kDefaultPadding / 2),
                                         Text(
                                           DateFormat('dd/MM/yyyy hh:mm a').format(message.sentDate.toDate()),
-                                          style: Theme.of(context).textTheme.caption,
+                                          style: Theme.of(context).textTheme.bodySmall,
                                         ),
                                       ],
                                     ),
-                                    SizedBox(height: kDefaultPadding),
-                                    Divider(thickness: 1),
+                                    const SizedBox(height: kDefaultPadding),
+                                    const Divider(thickness: 1),
                                     LayoutBuilder(
                                       builder: (context, constraints) => SizedBox(
                                         width: constraints.maxWidth > 850
@@ -137,8 +130,8 @@ class _EmailScreenState extends State<EmailScreen> {
                                                     "assets/Icons/Message.png",
                                                     width: 30,
                                                   ),
-                                                  SizedBox(width: kDefaultPadding/2),
-                                                  Text(
+                                                  const SizedBox(width: kDefaultPadding/2),
+                                                  const Text(
                                                     "Message",
                                                     style: TextStyle(
                                                       height: 1.5,
@@ -149,17 +142,17 @@ class _EmailScreenState extends State<EmailScreen> {
                                                   ),
                                                 ],
                                               ),
-                                              SizedBox(height: kDefaultPadding / 2),
+                                              const SizedBox(height: kDefaultPadding / 2),
                                               Text(
                                                 message.message,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   height: 1.5,
                                                   color: Color(0xFF4D5875),
                                                   fontWeight: FontWeight.w300,
                                                 ),
                                               ),
-                                              SizedBox(height: kDefaultPadding),
-                                              SizedBox(height: kDefaultPadding / 2),
+                                              const SizedBox(height: kDefaultPadding),
+                                              const SizedBox(height: kDefaultPadding / 2),
                                               //Location
                                               //Text("Longitude : "+message.location!.longitude.toString()):Text(""),
                                               isTechnicalRequest?
@@ -176,8 +169,8 @@ class _EmailScreenState extends State<EmailScreen> {
                                                           "assets/Icons/localize.png",
                                                           width: 30,
                                                         ),
-                                                        SizedBox(width: kDefaultPadding/2),
-                                                        Text(
+                                                        const SizedBox(width: kDefaultPadding/2),
+                                                        const Text(
                                                           "Location",
                                                           style: TextStyle(
                                                             height: 1.5,
@@ -188,10 +181,10 @@ class _EmailScreenState extends State<EmailScreen> {
                                                         ),
                                                       ],
                                                     ),
-                                                    SizedBox(height: kDefaultPadding/2),
+                                                    const SizedBox(height: kDefaultPadding/2),
                                                     Text(
                                                       "Latitude : "+'${message.location!.latitude}'+"\nLongitude : " +'${message.location!.longitude}',
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                         height: 1.5,
                                                         color: Color(0xFF4D5875),
                                                         fontWeight: FontWeight.w300,
@@ -200,9 +193,9 @@ class _EmailScreenState extends State<EmailScreen> {
                                                     ),
                                                   ],
                                                 ),
-                                              ):Text(""),
+                                              ):const Text(""),
 
-                                              SizedBox(height: kDefaultPadding),
+                                              const SizedBox(height: kDefaultPadding),
 
                                               isTechnicalRequest?
                                               //Text("Latitude : "+message.location!.latitude.toString()):Text(""),
@@ -212,7 +205,7 @@ class _EmailScreenState extends State<EmailScreen> {
                                                   style: ButtonStyle(
                                                     backgroundColor: MaterialStateProperty.all<Color>( kPrimaryColor),
                                                   ),
-                                                  child: Text(
+                                                  child: const Text(
                                                     'View location on Google Maps',
                                                     style: TextStyle(
                                                       color: Colors.white,
@@ -220,9 +213,9 @@ class _EmailScreenState extends State<EmailScreen> {
                                                     textAlign: TextAlign.center,
                                                   ),
                                                 ),
-                                              ):Text(""),
+                                              ):const Text(""),
 
-                                              SizedBox(height: kDefaultPadding),
+                                              const SizedBox(height: kDefaultPadding),
                                               //tableau
                                               SizedBox(
                                                 child: (widget.ReclamationType == "Technical Request")
@@ -234,8 +227,8 @@ class _EmailScreenState extends State<EmailScreen> {
                                                               "assets/Icons/Data.svg",
                                                               width: 30,
                                                             ),
-                                                            SizedBox(width: kDefaultPadding/2),
-                                                            Text(
+                                                            const SizedBox(width: kDefaultPadding/2),
+                                                            const Text(
                                                               "Network parameters",
                                                               style: TextStyle(
                                                                 height: 1.5,
@@ -246,7 +239,7 @@ class _EmailScreenState extends State<EmailScreen> {
                                                             ),
                                                           ],
                                                         ),
-                                                        SizedBox(height: kDefaultPadding/2),
+                                                        const SizedBox(height: kDefaultPadding/2),
                                                         Table(
                                                           border: TableBorder.all(
                                                             color: Colors.black54,
@@ -262,7 +255,7 @@ class _EmailScreenState extends State<EmailScreen> {
                                                           children: [
                                                             TableCell(
                                                               child: Padding(
-                                                                padding: EdgeInsets.all(8.0),
+                                                                padding: const EdgeInsets.all(8.0),
                                                                 child: Center(
                                                                   child: Text(
                                                                     '${entry.key}'.toUpperCase(),
@@ -277,7 +270,7 @@ class _EmailScreenState extends State<EmailScreen> {
                                                             ),
                                                             TableCell(
                                                               child: Padding(
-                                                                padding: EdgeInsets.all(8.0),
+                                                                padding: const EdgeInsets.all(8.0),
                                                                 child: Center(child: Text(
                                                                     '${entry.value}',
                                                                     style: const TextStyle(
@@ -293,10 +286,10 @@ class _EmailScreenState extends State<EmailScreen> {
                                                 ),
                                                       ],
                                                     )
-                                                    : Text(""),
+                                                    : const Text(""),
                                               ),
                                               //
-                                              SizedBox(height: kDefaultPadding),
+                                              const SizedBox(height: kDefaultPadding),
 
                                             ],
                                           ),
@@ -306,7 +299,9 @@ class _EmailScreenState extends State<EmailScreen> {
                                   ],
                                 );
                               }
-                              else return Container();
+                              else {
+                                return Container();
+                              }
                             }
                             else {return const Center(child: CircularProgressIndicator(),);}
                           },
