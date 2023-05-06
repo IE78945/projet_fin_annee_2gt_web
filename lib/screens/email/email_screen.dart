@@ -266,7 +266,7 @@ class _EmailScreenState extends State<EmailScreen> {
                                                                 child: Center(
                                                                   child: Text(
                                                                     '${entry.key}'.toUpperCase(),
-                                                                    style: TextStyle(
+                                                                    style: const TextStyle(
                                                                       height: 1.5,
                                                                       color: Colors.black,
                                                                       fontWeight: FontWeight.w900,
@@ -278,7 +278,13 @@ class _EmailScreenState extends State<EmailScreen> {
                                                             TableCell(
                                                               child: Padding(
                                                                 padding: EdgeInsets.all(8.0),
-                                                                child: Center(child: Text('${entry.value}')),
+                                                                child: Center(child: Text(
+                                                                    '${entry.value}',
+                                                                    style: const TextStyle(
+                                                                    height: 1.5,
+                                                                    ),
+                                                                ),
+                                                                ),
                                                               ),
                                                             ),
                                                           ],
