@@ -55,24 +55,8 @@ void showForgotPasswordCustomDialog(BuildContext context, {required ValueChanged
                         ),
                       ),
                       const ForgotPasswordForm(),
-
                     ],
                   ),
-                  const Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: -50,
-
-                    child: CircleAvatar(
-                      radius: 16,
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.close,
-                        size: 20,
-                        color: Colors.black,
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),
