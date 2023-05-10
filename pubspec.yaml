@@ -46,6 +46,7 @@ dependencies:
   get: ^4.6.5
   url_launcher: ^6.1.10
   rive: ^0.10.4
+  csv: ^5.0.2
 
 dev_dependencies:
   flutter_test:

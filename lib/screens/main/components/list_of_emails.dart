@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -7,9 +11,11 @@ import 'package:projet_fin_annee_2gt_web/components/side_menu.dart';
 import 'package:projet_fin_annee_2gt_web/models/discussions_model.dart';
 import 'package:projet_fin_annee_2gt_web/responsive.dart';
 import 'package:websafe_svg/websafe_svg.dart';
-
+import 'package:path/path.dart' as path;
 import '../../../constants.dart';
+import '../../../models/messages_model.dart';
 import '../../email/email_screen.dart';
+import 'dart:html' as html;
 import 'discussion_card.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -144,6 +150,42 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                     }
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    showPopup();
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>( kPrimaryColor),
+                  ),
+                  child: const Text(
+                    'View Statistics',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: ElevatedButton(
+                  onPressed: () {
+                    generateCsvFromFirestore();
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>( kPrimaryColor),
+                  ),
+                  child: const Text(
+                    'Download All users CSV Data',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -152,6 +194,150 @@ class _ListOfEmailsState extends State<ListOfEmails> {
 
   }
 
+
+  Future<void> generateCsvFromFirestore() async {
+    // Fetch data from Firestore
+    final querySnapshot = await FirebaseFirestore.instance.collection('Chats').where("Type" , isEqualTo: "Technical Request").get();
+
+    // Create a List<List<dynamic>> to store the CSV data
+    final csvData = <List<dynamic>>[];
+
+    // Add column headers to the CSV data
+    csvData.add(['Phone No', 'Generation', 'Latitude', 'Longitude']);
+
+    // Iterate over the Firestore documents and add data to the CSV data
+    for (final doc in querySnapshot.docs) {
+      final discussion = DiscussionModel.fromSnapshot(doc);
+
+      // Fetch all messages based on discussionID
+      final messagesSnapshot = await FirebaseFirestore.instance.collection("Chats").doc(discussion.id).collection("Messages").get();
+
+      // Iterate over the messages and extract the location data
+      for (final messageDoc in messagesSnapshot.docs) {
+        final message = MessageModel.fromSnapshot(messageDoc);
+        final latitude = message.location?.latitude ?? '';
+        final longitude = message.location?.longitude ?? '';
+
+        // Add a new row with the message and location data
+        csvData.add([
+          discussion.phoneNo ?? '',
+          discussion.generation ?? '',
+          latitude,
+          longitude,
+        ]);
+      }
+    }
+
+    // Create a CSV transformer
+    final csvTransformer = const ListToCsvConverter();
+
+    // Transform the CSV data to a CSV string
+    final csvString = csvTransformer.convert(csvData);
+
+    // Create a Blob from the CSV string
+    final csvBlob = html.Blob([csvString], 'text/csv;charset=utf-8');
+
+    // Generate a unique filename for the CSV file
+    final fileName = 'User_Location_Data.csv';
+
+    // Create a download link for the CSV file
+    final csvUrl = html.Url.createObjectUrlFromBlob(csvBlob);
+    final link = html.document.createElement('a') as html.AnchorElement;
+    link.href = csvUrl;
+    link.download = fileName;
+
+    // Programmatically click the download link to initiate the download
+    link.click();
+
+    // Clean up the download link
+    html.Url.revokeObjectUrl(csvUrl);
+  }
+
+  void showPopup() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          // Customize the appearance of the popup
+          color: Colors.white,
+          child: Column(
+            children: [
+              // Add the contents of the popup here
+              SizedBox(height: kDefaultPadding),
+              const Text(
+                "Statistics",
+                style: TextStyle(
+                  height: 1.5,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(height: kDefaultPadding),
+              const Text(
+                "Since when you want stats",
+                style: TextStyle(
+                  height: 1.5,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(height: kDefaultPadding),
+              ElevatedButton(
+                onPressed: () => _selectDate(context),
+                child: Text('Select Date'),
+              ),
+              SizedBox(height: kDefaultPadding),
+              FutureBuilder<int>(
+                future: FirebaseFirestore.instance.collection('Chats').get().then((snapshot) => snapshot.size),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return const Text('Error retrieving number');
+                  } else {
+                    final number = snapshot.data;
+                    return Text(
+                      'Number of all reclamations = $number',
+                      style: const TextStyle(
+                        height: 1.5,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 16,
+                      ),
+                    );
+                  }
+                },
+              ),
+
+              SizedBox(height: kDefaultPadding),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the popup
+                },
+                child: const Text('Close'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  DateTime selectedDate = DateTime.now();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
 
   GetDiscussionSortedBy(String sortBy) {
     if (sortBy == "2G (GSM)" || sortBy == "3G (CDMA)" || sortBy == "4G (LTE)" )
