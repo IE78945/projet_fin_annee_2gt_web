@@ -311,7 +311,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                   } else {
                     final number = snapshot.data;
                     return Text(
-                      'Number of all reclamations = $number',
+                      'Number of reclamations = $number',
                       style: const TextStyle(
                         height: 1.5,
                         color: Colors.black,
@@ -324,7 +324,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
               ),
               SizedBox(height: kDefaultPadding),
               FutureBuilder<int>(
-                future: getTypeCount(),
+                future: getThechnicalCount(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
@@ -333,7 +333,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                   } else {
                     final number = snapshot.data;
                     return Text(
-                      'Number of all Technical requests = $number',
+                      'Number of Technical requests = $number',
                       style: const TextStyle(
                         height: 1.5,
                         color: Colors.black,
@@ -344,6 +344,29 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                   }
                 },
               ),
+              SizedBox(height: kDefaultPadding),
+              FutureBuilder<int>(
+                future: getCommercialCount(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return const Text('Error retrieving number');
+                  } else {
+                    final number = snapshot.data;
+                    return Text(
+                      'Number of Commercial requests = $number',
+                      style: const TextStyle(
+                        height: 1.5,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 16,
+                      ),
+                    );
+                  }
+                },
+              ),
+              SizedBox(height: kDefaultPadding),
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the popup
@@ -357,7 +380,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
     );
   }
 
-  Future<int> getTypeCount() async {
+  Future<int> getThechnicalCount() async {
     // Convert the start and end dates to Firestore Timestamps
     final startTimestamp = Timestamp.fromDate(_selectedStartDate);
     final endTimestamp = Timestamp.fromDate(_selectedEndDate.add(Duration(days: 1)));
@@ -365,15 +388,31 @@ class _ListOfEmailsState extends State<ListOfEmails> {
     // Fetch discussions based on the selected date interval and type
     final querySnapshot = await FirebaseFirestore.instance
         .collection('Chats')
-        .where('Type', isEqualTo: 'Technical Request')
-        //.where('LastMessageDate', isGreaterThanOrEqualTo: startTimestamp)
-        //.where('LastMessageDate', isLessThan: endTimestamp)
+        .where("Type", isEqualTo: 'Technical Request')
+        .where("LastMessageDate", isGreaterThanOrEqualTo: startTimestamp)
+        .where("LastMessageDate", isLessThan: endTimestamp)
         .get();
 
     // Return the count of discussions
     return querySnapshot.size;
   }
 
+  Future<int> getCommercialCount() async {
+    // Convert the start and end dates to Firestore Timestamps
+    final startTimestamp = Timestamp.fromDate(_selectedStartDate);
+    final endTimestamp = Timestamp.fromDate(_selectedEndDate.add(Duration(days: 1)));
+
+    // Fetch discussions based on the selected date interval and type
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Chats')
+        .where("Type", isEqualTo: 'Commercial Request')
+        .where("LastMessageDate", isGreaterThanOrEqualTo: startTimestamp)
+        .where("LastMessageDate", isLessThan: endTimestamp)
+        .get();
+
+    // Return the count of discussions
+    return querySnapshot.size;
+  }
 
 
   Future<int> getReclamationsCount() async {
