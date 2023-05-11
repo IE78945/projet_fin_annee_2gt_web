@@ -24,7 +24,8 @@ class ListOfEmails extends StatefulWidget {
   int? clickedDiscussionIndex;
   String onSortBySelected;
   final Function(String?, String, String) updateEmailScreen;
-
+  DateTime? selectedStartDate;
+  DateTime? selectedEndDate;
   ListOfEmails({
     Key? key,
     this.clickedDiscussionIndex,
@@ -39,6 +40,9 @@ class ListOfEmails extends StatefulWidget {
 }
 
 class _ListOfEmailsState extends State<ListOfEmails> {
+
+  late DateTime _selectedStartDate;
+  late DateTime _selectedEndDate;
 
   late int _activeIndex ;
 
@@ -75,6 +79,8 @@ class _ListOfEmailsState extends State<ListOfEmails> {
     else {
       _activeIndex = widget.clickedDiscussionIndex!;
     }
+    _selectedStartDate = widget.selectedStartDate ?? DateTime.now();
+    _selectedEndDate = widget.selectedEndDate ?? DateTime.now();
     super.initState();
   }
 
@@ -285,12 +291,18 @@ class _ListOfEmailsState extends State<ListOfEmails> {
               ),
               SizedBox(height: kDefaultPadding),
               ElevatedButton(
-                onPressed: () => _selectDate(context),
-                child: Text('Select Date'),
+                onPressed: () => _selectDate(context, true),
+
+                  child: Text('Select StartDate'),
+              ),
+              SizedBox(height: kDefaultPadding),
+              ElevatedButton(
+                onPressed: () => _selectDate(context, false),
+                child: Text('Select EndDate'),
               ),
               SizedBox(height: kDefaultPadding),
               FutureBuilder<int>(
-                future: FirebaseFirestore.instance.collection('Chats').get().then((snapshot) => snapshot.size),
+                future: getReclamationsCount(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
@@ -310,8 +322,28 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                   }
                 },
               ),
-
               SizedBox(height: kDefaultPadding),
+              FutureBuilder<int>(
+                future: getTypeCount(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return const Text('Error retrieving number');
+                  } else {
+                    final number = snapshot.data;
+                    return Text(
+                      'Number of all Technical requests = $number',
+                      style: const TextStyle(
+                        height: 1.5,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 16,
+                      ),
+                    );
+                  }
+                },
+              ),
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the popup
@@ -325,18 +357,55 @@ class _ListOfEmailsState extends State<ListOfEmails> {
     );
   }
 
-  DateTime selectedDate = DateTime.now();
+  Future<int> getTypeCount() async {
+    // Convert the start and end dates to Firestore Timestamps
+    final startTimestamp = Timestamp.fromDate(_selectedStartDate);
+    final endTimestamp = Timestamp.fromDate(_selectedEndDate.add(Duration(days: 1)));
 
-  Future<void> _selectDate(BuildContext context) async {
+    // Fetch discussions based on the selected date interval and type
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Chats')
+        .where('Type', isEqualTo: 'Technical Request')
+        //.where('LastMessageDate', isGreaterThanOrEqualTo: startTimestamp)
+        //.where('LastMessageDate', isLessThan: endTimestamp)
+        .get();
+
+    // Return the count of discussions
+    return querySnapshot.size;
+  }
+
+
+
+  Future<int> getReclamationsCount() async {
+    // Convert the start and end dates to Firestore Timestamps
+    final startTimestamp = Timestamp.fromDate(_selectedStartDate);
+    final endTimestamp = Timestamp.fromDate(_selectedEndDate.add(Duration(days: 1)));
+    // Fetch discussions based on the selected date interval
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Chats')
+        .where("LastMessageDate", isGreaterThanOrEqualTo: startTimestamp)
+        .where("LastMessageDate", isLessThan: endTimestamp)
+        .get();
+    // Return the count of discussions
+    return querySnapshot.size;
+  }
+
+  Future<void> _selectDate(BuildContext context, bool isStartDate) async {
     final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(1900),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
+      context: context,
+      initialDate: isStartDate ? _selectedStartDate : _selectedEndDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null) {
       setState(() {
-        selectedDate = picked;
+        if (isStartDate) {
+          _selectedStartDate = picked;
+        } else {
+          _selectedEndDate = picked;
+        }
       });
+    }
   }
 
   GetDiscussionSortedBy(String sortBy) {
