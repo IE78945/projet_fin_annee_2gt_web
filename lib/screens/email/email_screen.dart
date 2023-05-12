@@ -550,4 +550,55 @@ class _EmailScreenState extends State<EmailScreen> {
   }
 
 
+  Future<int> get2gCount() async {
+    // Convert the start and end dates to Firestore Timestamps
+    final startTimestamp = Timestamp.fromDate(_selectedStartDate);
+    final endTimestamp = Timestamp.fromDate(_selectedEndDate.add(Duration(days: 1)));
+
+    // Fetch discussions based on the selected date interval and type
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Chats')
+        .where("Generation", isEqualTo: '2G (GSM)')
+        .where("LastMessageDate", isGreaterThanOrEqualTo: startTimestamp)
+        .where("LastMessageDate", isLessThan: endTimestamp)
+        .get();
+
+    // Return the count of discussions
+    return querySnapshot.size;
+  }
+
+  Future<int> get3gCount() async {
+    // Convert the start and end dates to Firestore Timestamps
+    final startTimestamp = Timestamp.fromDate(_selectedStartDate);
+    final endTimestamp = Timestamp.fromDate(_selectedEndDate.add(Duration(days: 1)));
+
+    // Fetch discussions based on the selected date interval and type
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Chats')
+        .where("Generation", isEqualTo: '3G (CDMA)')
+        .where("LastMessageDate", isGreaterThanOrEqualTo: startTimestamp)
+        .where("LastMessageDate", isLessThan: endTimestamp)
+        .get();
+
+    // Return the count of discussions
+    return querySnapshot.size;
+  }
+
+  Future<int> get4gCount() async {
+    // Convert the start and end dates to Firestore Timestamps
+    final startTimestamp = Timestamp.fromDate(_selectedStartDate);
+    final endTimestamp = Timestamp.fromDate(_selectedEndDate.add(Duration(days: 1)));
+
+    // Fetch discussions based on the selected date interval and type
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Chats')
+        .where("Generation", isEqualTo: '4G (LTE)')
+        .where("LastMessageDate", isGreaterThanOrEqualTo: startTimestamp)
+        .where("LastMessageDate", isLessThan: endTimestamp)
+        .get();
+
+    // Return the count of discussions
+    return querySnapshot.size;
+  }
+
 }
