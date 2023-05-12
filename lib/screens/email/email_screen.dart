@@ -145,8 +145,8 @@ class _EmailScreenState extends State<EmailScreen> {
                                   ),
                                 ),
                                 Text(
-                                    _selectedStartDate.toString(),
-                                    style: const TextStyle(
+                                  DateFormat('dd/MM/yyyy').format(_selectedStartDate),
+                                  style: const TextStyle(
                                       height: 1.5,
                                       color: Color(0xFF4D5875),
                                       fontWeight: FontWeight.w300,
@@ -169,7 +169,7 @@ class _EmailScreenState extends State<EmailScreen> {
                                   ),
                                 ),
                                 Text(
-                                    _selectedEndDate.toString(),
+                                    DateFormat('dd/MM/yyyy').format(_selectedEndDate) ,
                                     style: const TextStyle(
                                       height: 1.5,
                                       color: Color(0xFF4D5875),
