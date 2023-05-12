@@ -219,6 +219,38 @@ class _EmailScreenState extends State<EmailScreen> {
                           },
                         ),
                         const SizedBox(height: kDefaultPadding),
+                        FutureBuilder<dynamic>(
+                          future: getGenerationStatistics(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+                            else if (snapshot.hasError) {
+                              return const Text('Error retrieving number');
+                            } else {
+                              return SfCircularChart(
+                                tooltipBehavior: _tooltip,
+                                series: [
+                                  DoughnutSeries<Chart,String>(
+                                    dataSource: snapshot.data,
+                                    name: "Requests Generation",
+                                    xValueMapper: (Chart i, _ ) => i.Title,
+                                    yValueMapper:(Chart i, _ ) => i.Poucentage,
+                                    pointColorMapper: (Chart i, _) => i.color,
+                                    // Enable data label
+                                    dataLabelSettings: DataLabelSettings(isVisible: true),
+
+                                    legendIconType: LegendIconType.circle,
+                                    explode: true,
+                                    explodeGesture: ActivationMode.singleTap,
+
+                                  ),
+                                ],
+                                legend: Legend(isVisible: true), // Add a legend
+                              );
+                            }
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -501,7 +533,27 @@ class _EmailScreenState extends State<EmailScreen> {
 
   }
 
+  Future<List<Chart>?> getGenerationStatistics() async{
+    int TechnicalReclamationNumber = await getThechnicalCount();
+    int GSM = await get2gCount();
+    int WCDMA = await get3gCount();
+    int LTE = await get4gCount();
 
+    if (TechnicalReclamationNumber != 0){
+      TypeChartData = [
+        Chart('GSM Requests', GSM, MyBlue),
+        Chart('WCDMA Requests', WCDMA, MyPurple),
+        Chart('LTE Requests', LTE, MyPink),
+      ];
+
+      return TypeChartData;
+
+    }
+
+    else return null;
+
+      
+  }
 
   Future<int> getReclamationsCount() async {
     // Convert the start and end dates to Firestore Timestamps
@@ -550,7 +602,6 @@ class _EmailScreenState extends State<EmailScreen> {
     // Return the count of discussions
     return querySnapshot.size;
   }
-
 
   Future<int> get2gCount() async {
     // Convert the start and end dates to Firestore Timestamps
