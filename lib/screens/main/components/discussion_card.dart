@@ -30,9 +30,9 @@ class _DiscussionCardState extends State<DiscussionCard> {
   late bool isSelected;
 
   GetColor(){
-    if (widget.data!.generation == "2G (GSM)") return TagColor2G;
-    if (widget.data!.generation == "3G (CDMA)") return TagColor3G;
-    if (widget.data!.generation == "4G (LTE)") return TagColor4G;
+    if (widget.data!.generation == "2G (GSM)") return MyBlue;
+    if (widget.data!.generation == "3G (CDMA)") return MyPurple;
+    if (widget.data!.generation == "4G (LTE)") return MyPink;
     else return Colors.white;
   }
 

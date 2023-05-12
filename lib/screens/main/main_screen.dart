@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projet_fin_annee_2gt_web/components/side_menu.dart';
-import 'package:projet_fin_annee_2gt_web/models/discussions_model.dart';
+import 'package:projet_fin_annee_2gt_web/constants.dart';
 import 'package:projet_fin_annee_2gt_web/responsive.dart';
 import 'package:projet_fin_annee_2gt_web/screens/email/email_screen.dart';
 import 'components/list_of_emails.dart';
@@ -16,33 +16,42 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
 
-  Widget emailScreen = EmailScreen(id: "", UserphoneNo: "", ReclamationType: "",);
-
-
-
-  void updateEmailScreen(String? id, String userPhoneNo, String reclamationType) {
-    setState(() {
-      emailScreen = EmailScreen(
-        id: id,
-        UserphoneNo: userPhoneNo,
-        ReclamationType: reclamationType,
-      );
-    });
-  }
+  Widget emailScreen = EmailScreen(id: "", UserphoneNo: "", ReclamationType: "", isStatisticSection: false,);
 
   String _discussionSortedBy = 'All';
   int _clickedDiscussionIndex = -1;
+  bool SectionType = false;
 
-  void updateDiscussionSortedBy(String sortBy) {
+
+  void updateEmailScreen(String? id, String userPhoneNo, String reclamationType ) {
+
+      setState(() {
+        emailScreen = EmailScreen(
+          id: id,
+          UserphoneNo: userPhoneNo,
+          ReclamationType: reclamationType,
+          isStatisticSection: SectionType,
+        );
+      });
+
+  }
+
+  void updateDiscussionSortedBy(String sortBy , bool SectionType) {
     setState(() {
-      emailScreen = EmailScreen(id: "", UserphoneNo: "", ReclamationType: "",);
-      if (_discussionSortedBy == sortBy) {
-        // If the same sort by option is clicked again, set the index to -1
-        _clickedDiscussionIndex = -1;
-      } else {
-        _discussionSortedBy = sortBy;
-      }
+        emailScreen = EmailScreen(id: "", UserphoneNo: "", ReclamationType: "",isStatisticSection: SectionType);
+        if (_discussionSortedBy == sortBy) {
+          // If the same sort by option is clicked again, set the index to -1
+          _clickedDiscussionIndex = -1;
+        } else {
+          _discussionSortedBy = sortBy;
+        }
 
+    });
+  }
+
+  void updateSectionType (bool SectionType) {
+    setState(() {
+      this.SectionType = SectionType;
     });
   }
 
@@ -87,8 +96,8 @@ class _MainScreenState extends State<MainScreen> {
             Expanded(
               flex: _size.width > 1340 ? 2 : 4,
               child: SideMenu(
-                //onTagSelected: updateClickedDiscussionIndex,
                 onSortBySelected: updateDiscussionSortedBy,
+
               ),
             ),
             Expanded(

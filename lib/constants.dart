@@ -11,8 +11,14 @@ const kGrayColor = Color(0xFF8793B2);
 const kTitleTextColor = Color(0xFF30384D);
 const kTextColor = Color(0xFF4D5875);
 
-const TagColor2G = Color(0xFFFF8F64);
-const TagColor3G = Color(0xFFAD6AFF);
-const TagColor4G = Color(0xFFFA596A);
+
+const MyBlue = Color(0xFF2FBBF5);
+const MyPurple = Color(0xFFAD6AFF);
+const MyPink = Color(0xFFFA596A);
+
+const MyOrange = Color(0xFFFF8F64);
+const MyGreen = Color(0xB315ECF2);
 
 const kDefaultPadding = 20.0;
+
+const String statistic = "Statistic";

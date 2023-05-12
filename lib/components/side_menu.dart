@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -7,14 +9,17 @@ import 'package:websafe_svg/websafe_svg.dart';
 
 import '../Repository/authentification_repository.dart';
 import '../constants.dart';
+import '../models/discussions_model.dart';
+import '../models/messages_model.dart';
 import '../screens/onboding/onboding_screen.dart';
 import 'side_menu_item.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:html' as html;
 
 class SideMenu extends StatefulWidget {
   int? clickedMenuItemIndex;
-  final Function(String) onSortBySelected;
+  final Function(String,bool) onSortBySelected;
 
   SideMenu({
     Key? key,
@@ -101,7 +106,7 @@ class _SideMenuState extends State<SideMenu> {
                         return SideMenuItem(
                           press: () {
                             _onMenuItemPress(0);
-                            widget.onSortBySelected('All');
+                            widget.onSortBySelected('All',false);
                           },
                           title: "Inbox",
                           iconSrc: "assets/Icons/Inbox.svg",
@@ -112,7 +117,7 @@ class _SideMenuState extends State<SideMenu> {
                         return SideMenuItem(
                           press: () {
                             _onMenuItemPress(0);
-                            widget.onSortBySelected('All');
+                            widget.onSortBySelected('All',false);
                           },
                           title: "Inbox",
                           iconSrc: "assets/Icons/Inbox.svg",
@@ -125,7 +130,7 @@ class _SideMenuState extends State<SideMenu> {
                     else return SideMenuItem(
                       press: () {
                         _onMenuItemPress(0);
-                        widget.onSortBySelected('All');
+                        widget.onSortBySelected('All',false);
                       },
                       title: "Inbox",
                       iconSrc: "assets/Icons/Inbox.svg",
@@ -135,7 +140,7 @@ class _SideMenuState extends State<SideMenu> {
                   else return SideMenuItem(
                     press: () {
                       _onMenuItemPress(0);
-                      widget.onSortBySelected('All');
+                      widget.onSortBySelected('All',false);
                     },
                     title: "Inbox",
                     iconSrc: "assets/Icons/Inbox.svg",
@@ -147,8 +152,7 @@ class _SideMenuState extends State<SideMenu> {
               SideMenuItem(
                 press: () {
                   _onMenuItemPress(1);
-                  widget.onSortBySelected('Commercial Request');
-                  //widget.onTagSelected(-1);
+                  widget.onSortBySelected('Commercial Request',false);
                 },
                 title: "Commercial",
                 iconSrc: "assets/Icons/Comm.svg",
@@ -158,7 +162,7 @@ class _SideMenuState extends State<SideMenu> {
               SideMenuItem(
                 press: () {
                   _onMenuItemPress(2);
-                  widget.onSortBySelected('Technical Request');
+                  widget.onSortBySelected('Technical Request',false);
                   ShowTags();
                 },
                 title: "Technical",
@@ -175,14 +179,35 @@ class _SideMenuState extends State<SideMenu> {
                     visible: isItemSelected(2),
                     child: Column(
                       children: [
-                        buildTag(context, color: TagColor2G , title: "GSM"),
-                        buildTag(context, color: TagColor3G, title: "WCDMA"),
-                        buildTag(context, color: TagColor4G, title: "LTE"),
+                        buildTag(context, color: MyBlue , title: "GSM"),
+                        buildTag(context, color: MyPurple, title: "WCDMA"),
+                        buildTag(context, color: MyPink, title: "LTE"),
                       ],
                     ),
                   ),
                 ],
               ),
+              SideMenuItem(
+                press: () {
+                  _onMenuItemPress(3);
+                  widget.onSortBySelected("",true);
+                },
+                title: statistic,
+                iconSrc: "assets/Icons/statistics.svg",
+                isActive: isItemSelected(3),
+              ),
+
+              SideMenuItem(
+                press: () {
+                  _onMenuItemPress(4);
+                  widget.onSortBySelected("",false);
+                  generateCsvFromFirestore();
+                },
+                title: "Download CSV",
+                iconSrc: "assets/Icons/Download.svg",
+                isActive: isItemSelected(4),
+              ),
+
               SideMenuItem(
                 press: () {
                   setState(() {
@@ -221,19 +246,19 @@ class _SideMenuState extends State<SideMenu> {
       onTap: () {
         switch(title) {
           case "GSM": {
-            widget.onSortBySelected('2G (GSM)');
+            widget.onSortBySelected('2G (GSM)',false);
             _onMenuItemPress(2);
           }
           break;
 
           case "WCDMA": {
-            widget.onSortBySelected('3G (CDMA)');
+            widget.onSortBySelected('3G (CDMA)',false);
             _onMenuItemPress(2);
           }
           break;
 
           case "LTE": {
-            widget.onSortBySelected('4G (LTE)');
+            widget.onSortBySelected('4G (LTE)',false);
             _onMenuItemPress(2);
           }
           break;
@@ -264,4 +289,64 @@ class _SideMenuState extends State<SideMenu> {
       ),
     );
   }
+
+  Future<void> generateCsvFromFirestore() async {
+    // Fetch data from Firestore
+    final querySnapshot = await FirebaseFirestore.instance.collection('Chats').where("Type" , isEqualTo: "Technical Request").get();
+
+    // Create a List<List<dynamic>> to store the CSV data
+    final csvData = <List<dynamic>>[];
+
+    // Add column headers to the CSV data
+    csvData.add(['Phone No', 'Generation', 'Latitude', 'Longitude']);
+
+    // Iterate over the Firestore documents and add data to the CSV data
+    for (final doc in querySnapshot.docs) {
+      final discussion = DiscussionModel.fromSnapshot(doc);
+
+      // Fetch all messages based on discussionID
+      final messagesSnapshot = await FirebaseFirestore.instance.collection("Chats").doc(discussion.id).collection("Messages").get();
+
+      // Iterate over the messages and extract the location data
+      for (final messageDoc in messagesSnapshot.docs) {
+        final message = MessageModel.fromSnapshot(messageDoc);
+        final latitude = message.location?.latitude ?? '';
+        final longitude = message.location?.longitude ?? '';
+
+        // Add a new row with the message and location data
+        csvData.add([
+          discussion.phoneNo ?? '',
+          discussion.generation ?? '',
+          latitude,
+          longitude,
+        ]);
+      }
+    }
+
+    // Create a CSV transformer
+    final csvTransformer = const ListToCsvConverter();
+
+    // Transform the CSV data to a CSV string
+    final csvString = csvTransformer.convert(csvData);
+
+    // Create a Blob from the CSV string
+    final csvBlob = html.Blob([csvString], 'text/csv;charset=utf-8');
+
+    // Generate a unique filename for the CSV file
+    final fileName = 'User_Location_Data.csv';
+
+    // Create a download link for the CSV file
+    final csvUrl = html.Url.createObjectUrlFromBlob(csvBlob);
+    final link = html.document.createElement('a') as html.AnchorElement;
+    link.href = csvUrl;
+    link.download = fileName;
+
+    // Programmatically click the download link to initiate the download
+    link.click();
+
+    // Clean up the download link
+    html.Url.revokeObjectUrl(csvUrl);
+  }
 }
+
+
