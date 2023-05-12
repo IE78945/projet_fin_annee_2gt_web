@@ -145,8 +145,8 @@ class _EmailScreenState extends State<EmailScreen> {
                                   ),
                                 ),
                                 Text(
-                                    _selectedStartDate.toString(),
-                                    style: const TextStyle(
+                                  DateFormat('dd/MM/yyyy').format(_selectedStartDate),
+                                  style: const TextStyle(
                                       height: 1.5,
                                       color: Color(0xFF4D5875),
                                       fontWeight: FontWeight.w300,
@@ -169,7 +169,7 @@ class _EmailScreenState extends State<EmailScreen> {
                                   ),
                                 ),
                                 Text(
-                                    _selectedEndDate.toString(),
+                                    DateFormat('dd/MM/yyyy').format(_selectedEndDate) ,
                                     style: const TextStyle(
                                       height: 1.5,
                                       color: Color(0xFF4D5875),
@@ -185,7 +185,7 @@ class _EmailScreenState extends State<EmailScreen> {
                           ],
                         ),
                         const SizedBox(height: kDefaultPadding),
-                        //Charte
+                        //Charte Request Type
                         FutureBuilder<dynamic>(
                           future: getTechnicalCommercialStatistics(),
                           builder: (context, snapshot) {
@@ -204,7 +204,6 @@ class _EmailScreenState extends State<EmailScreen> {
                                       xValueMapper: (Chart i, _ ) => i.Title,
                                       yValueMapper:(Chart i, _ ) => i.Poucentage,
                                       pointColorMapper: (Chart i, _) => i.color,
-
                                       // Enable data label
                                       dataLabelSettings: DataLabelSettings(isVisible: true),
 
@@ -214,10 +213,12 @@ class _EmailScreenState extends State<EmailScreen> {
 
                                   ),
                                 ],
+                                legend: Legend(isVisible: true), // Add a legend
                               );
                             }
                           },
                         ),
+                        const SizedBox(height: kDefaultPadding),
                       ],
                     ),
                   ),
@@ -499,6 +500,7 @@ class _EmailScreenState extends State<EmailScreen> {
     else return null;
 
   }
+
 
 
   Future<int> getReclamationsCount() async {
